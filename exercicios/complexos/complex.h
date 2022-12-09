@@ -1,4 +1,4 @@
-// compplex.h
+// complex.h
 
 typedef struct {
 	double a;
