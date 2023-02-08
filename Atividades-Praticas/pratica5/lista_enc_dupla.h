@@ -20,7 +20,7 @@ typedef struct nodoLEnc2{
 
 typedef struct ListaEnc2{
    NodoLEnc2 *prim;
-   int tam = 0;
+   int tam;
 } ListaEnc2;
 
 // Funcao que cria uma lista
@@ -44,5 +44,8 @@ int removeInfoListaEnc2(ListaEnc2* lista, int chave);
 
 // Copia uma lista
 ListaEnc2* copiaListaEnc2(ListaEnc2 *lista);
+
+// Insere um nodo em qualquer posição
+int inserePosListaEnc2(ListaEnc2 *lista,  Info info, int pos);
 
 #endif

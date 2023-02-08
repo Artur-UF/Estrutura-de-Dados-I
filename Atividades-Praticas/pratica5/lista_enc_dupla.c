@@ -7,6 +7,7 @@ ListaEnc2* criaListaEnc2(){
    ListaEnc2 *lista = (ListaEnc2*)malloc(sizeof(ListaEnc2));
    if (lista != NULL) // Idealmente, sempre checar!
       lista->prim = NULL; // Representacao de lista vazia
+   lista->tam = 0;
    return lista;
 }
 
@@ -73,6 +74,7 @@ int removeInfoListaEnc2(ListaEnc2* lista, int chave){
             aux->prox->ant = aux->ant;            
       }
       free(aux);
+      lista->tam -= 1;
       return 1;
    }
    return 0; // Nao encontrou
@@ -138,19 +140,48 @@ ListaEnc2* copiaListaEnc2(ListaEnc2 *lista){
 }
 
 // Insere um nodo em qualquer posição
-int inserePosListaEnc2(ListaEnc2 *lista,  Info info, int pos){
-	if(pos < 0 || pos > lista->tam){
+int inserePosListaEnc2(ListaEnc2 *lista,  Info info, int pos){ // TÁ ADICIONANDO UMA POSIÇÃO ANTERIOR
+	
+	// Se a posição for inválida
+	if(pos < 0 || pos > lista->tam+1){
 		return 0;	
 	}
-
+	
+	// Se for válida
+	// Se for no início
+	if(pos == 1){
+		insereInicioListaEnc2(lista, info);
+		return 1;
+	}
+	
 	NodoLEnc2 *novo = (NodoLEnc2*)malloc(sizeof(NodoLEnc2));
+	if(novo == NULL){
+		return 0;
+	}
 	novo->info = info;
 
 	NodoLEnc2 *aux;
-
+	int cont = 1;
 	for(aux = lista->prim; aux->prox != NULL; aux = aux->prox){
-		
+		if(cont == pos){
+			// Se for no meio
+			novo->prox = aux;
+			novo->ant = aux->ant;
+			aux->ant->prox = novo;
+			aux->ant = novo;
+			return 1;
+		}
+		++cont;
 	}
+	
+	// Se quero adicionar no fim
+	if(pos == lista->tam+1){
+		novo->prox = NULL;
+		novo->ant = aux;
+		aux->prox = novo;
+		return 1;
+	}
+	
 	
 }
 
