@@ -1,5 +1,5 @@
 /*
-gcc arquivo.c -I/usr/local/include -L/usr/local/lib /usr/local/lib/libraylib.so.4.2.0
+gcc main.c -I/usr/local/include -L/usr/local/lib /usr/local/lib/libraylib.so.4.2.0
 */
 
 #include "raylib.h"
@@ -7,19 +7,23 @@ gcc arquivo.c -I/usr/local/include -L/usr/local/lib /usr/local/lib/libraylib.so.
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
-int main(void)
-{
+int main(void){
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 1080;
     const int screenHeight = 720;
     double cscale = 4;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(screenWidth, screenHeight, "Paciência");
 	Image imdeck = LoadImage("imagens/deck.png");
 	ImageResize(&imdeck, imdeck.width/3., imdeck.height/3.);
 	Texture2D deck = LoadTextureFromImage(imdeck);
+	Image iback = LoadImage("imagens/back.png");
+	ImageResize(&iback, iback.width/9.1, iback.height/9.1);
+	Texture2D back = LoadTextureFromImage(iback);
 	UnloadImage(imdeck);
+	UnloadImage(iback);
+	
 	Rectangle deckmtx[4][13];
 	
 	for(int i = 0; i <= 3; i++){
@@ -40,22 +44,15 @@ int main(void)
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        // Update
-        //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
-        //----------------------------------------------------------------------------------
-
-        // Draw
-        //----------------------------------------------------------------------------------
         BeginDrawing();
 
             ClearBackground(DARKGREEN);
+            DrawTexture(back, 50, 20, WHITE);
 			DrawTextureRec(deck, deckmtx[0][12], vec, WHITE);
 			DrawTextureRec(deck, deckmtx[0][12], vec2, WHITE);
 	
 
         EndDrawing();
-        //----------------------------------------------------------------------------------
     }
 
     // De-Initialization
@@ -63,8 +60,6 @@ int main(void)
     UnloadTexture(deck);
     
     
-    CloseWindow();        // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
-
+    CloseWindow();       
     return 0;
 }
