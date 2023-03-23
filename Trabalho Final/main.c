@@ -4,14 +4,21 @@ gcc main.c -I/usr/local/include -L/usr/local/lib /usr/local/lib/libraylib.so.4.2
 
 #include "raylib.h"
 #include "paciencia.h"
+#include "pilha_enc.h"
+#include "fila_enc.h"
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <stdio.h>
+
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void){
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 1500; //((deck.width/13.) + 20)*10;
-    const int screenHeight = 720;
+    const int screenWidth = 1500; //((largcarta) + 20)*10;
+    const int screenHeight = 900;
     double cscale = 4;
 
     InitWindow(screenWidth, screenHeight, "Paciência");  
@@ -24,32 +31,60 @@ int main(void){
 	UnloadImage(imdeck);
 	UnloadImage(iback);
 	
-	Carta cartas[4][13];
+	float largcarta = deck.width/13.;
+	float altcarta = deck.height/4.;
+	
+	Info cartas[8][13];
 	Rectangle teste;
 	
-
-
-    
-    
 	for(int i = 0; i <= 3; i++){
 		for(int j = 0; j <= 12; j++){
-			teste.x = j*deck.width/13.;
-			teste.y = i*deck.height/4.;
-			teste.width = deck.width/13.;
-			teste.height = deck.height/4.;
+			teste.x = j*largcarta;
+			teste.y = i*altcarta;
+			teste.width = largcarta;
+			teste.height = altcarta;
+			
+			// Baralho de cima			
 			cartas[i][j].tam = teste;
+			cartas[i][j].naipe = i;
+			cartas[i][j].num = j;
+			cartas[i][j].status = 1;
+			
+			// Baralho de baixo
+			cartas[i+4][j].tam = teste;
+			cartas[i+4][j].naipe = i;
+			cartas[i+4][j].num = j;
+			cartas[i+4][j].status = 1;
 		}
 	}
 	
+	// Criar o monte
+	PilhaEnc monte = criaPilhaEnc();
+	double randnaipe, randnum;
+	
+	
+	while(monte.tamanho < 50){
+		randnipe = uniform(0, 7);
+		randnum = uniform(0, 12);
+		if(cartas[randnipe][randnum].status){
+			empilhaPilhaEnc(monte, cartas[randnipe][randnum]);
+		}
+	}
+	
+	printf("Tamanho do monte; %d", monte.tamanho);	
+	
+	
 	// Retangulo no tabuleiro
 	Rectangle base;
-	float espaco = (screenWidth - 10*deck.width/13.)/11;
+	float espaco = (screenWidth - 10*largcarta)/11;
 
-
-	Vector2 vec = {espaco, 50.};
+	// Posicionamento das colunas
+	float inicioY = 2*espaco+altcarta;
+	
+	Vector2 vec = {espaco, inicioY+30.};
 	cartas[0][12].loc = vec;
 
-	Vector2 vec2 = {espaco, 80.};
+	Vector2 vec2 = {espaco, inicioY+2.*30.};
 	cartas[0][11].loc = vec2;	
 	
 	// Retangulo da carta selecionada
@@ -60,7 +95,7 @@ int main(void){
 	
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
-	Rectangle rec = {0, 0, deck.width/13., deck.height/4.};
+	Rectangle rec = {0, 0, largcarta, altcarta};
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -68,14 +103,14 @@ int main(void){
 
             ClearBackground(DARKGREEN);
             for(int i = 2; i < 10; ++i){
-            	base.x = (i+1)*espaco + i*deck.width/13.;
+            	base.x = (i+1)*espaco + i*largcarta;
             	base.y = 20;
-            	base.width = deck.width/13.;
-            	base.height = deck.height/4.;
-            	DrawRectangleRoundedLines(base, 0.1, 10, 3, WHITE);
+            	base.width = largcarta;
+            	base.height = altcarta;
+            	DrawRectangleRoundedLines(base, 0.15, 5, 3, WHITE);
             }
             
-            DrawTexture(back, espaco, 20, WHITE);
+            DrawTexture(back, espaco, inicioY, WHITE);
 			DrawTextureRec(deck, cartas[0][12].tam, vec, WHITE);
 			DrawTextureRec(deck, cartas[0][11].tam, vec2, WHITE);
 			
