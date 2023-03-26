@@ -2,20 +2,6 @@
 #define _FILA_ENC_H_
 #include "paciencia.h"
 
-typedef struct{
-	int naipe;
-	int num;
-	int status;
-	Rectangle tam;
-	Vector2 loc;
-} Info;
-
-
-typedef struct nodoLEnc{
-   Info info;
-   struct nodoLEnc *prox;
-} NodoLEnc;
-
 typedef NodoLEnc NodoFEnc;
 
 typedef struct FilaEnc{

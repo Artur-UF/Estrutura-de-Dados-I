@@ -2,19 +2,6 @@
 #define _PILHA_ENC_H_
 #include "paciencia.h"
 
-typedef struct{
-	int naipe;
-	int num;
-	int status;
-	Rectangle tam;
-	Vector2 loc;
-} Info;
-
-typedef struct nodoLEnc{
-   Info info;
-   struct nodoLEnc *prox;
-} NodoLEnc;
-
 typedef NodoLEnc NodoPEnc;
 
 typedef struct pilhaEnc{
