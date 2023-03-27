@@ -7,6 +7,7 @@ typedef NodoLEnc NodoFEnc;
 typedef struct FilaEnc{
    NodoFEnc *ini;
    NodoFEnc *fim;
+   int tamanho;
 } FilaEnc;
 
 // Funcao que cria uma fila

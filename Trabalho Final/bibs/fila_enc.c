@@ -5,12 +5,13 @@
 
 // Funcao que cria uma fila
 FilaEnc* criaFilaEnc(){
-   FilaEnc *fila = (FilaEnc*)malloc(sizeof(FilaEnc));
-   if (fila != NULL){ // Idealmente, sempre checar!
-      fila->ini = NULL;
-      fila->fim = NULL;
-   }
-   return fila;
+	FilaEnc *fila = (FilaEnc*)malloc(sizeof(FilaEnc));
+	if (fila != NULL){ // Idealmente, sempre checar!
+		fila->ini = NULL;
+		fila->fim = NULL;
+	}
+	fila->tamanho = 0;
+	return fila;
 }
 
 // Funcao que destroi uma fila
@@ -26,16 +27,17 @@ void destroiFilaEnc(FilaEnc *fila){
 
 // Funcao que insere um elemento na fila
 void enfileiraFilaEnc(FilaEnc *fila, Info info){
-   NodoFEnc *novo = (NodoFEnc*)malloc(sizeof(NodoFEnc));
-   if (fila != NULL){
-      novo->info = info;
-      novo->prox = NULL;
-      if (fila->fim != NULL)
-         fila->fim->prox = novo;
-      else
-         fila->ini = novo;
-      fila->fim = novo;
-   }
+	NodoFEnc *novo = (NodoFEnc*)malloc(sizeof(NodoFEnc));
+	if (fila != NULL){
+		novo->info = info;
+		novo->prox = NULL;
+		if (fila->fim != NULL)
+			fila->fim->prox = novo;
+		else
+			fila->ini = novo;
+			fila->fim = novo;
+		fila->tamanho++;
+	}
 }
 
 // Funcao que remove um elemento da fila
@@ -46,6 +48,7 @@ Info desenfileiraFilaEnc(FilaEnc *fila){
    if (fila->ini == NULL)
       fila->fim = NULL;
    free(aux);
+   fila->tamanho--;
    return info;
 }
 

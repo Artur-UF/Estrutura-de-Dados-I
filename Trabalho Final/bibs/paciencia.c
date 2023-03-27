@@ -1,9 +1,12 @@
-#include "raylib.h"
-#include "paciencia.h"
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
 #include <stdio.h>
+
+#include "raylib.h"
+#include "paciencia.h"
+#include "pilha_enc.h"
+#include "fila_enc.h"
 
 double uniform(double min, double max) {
 	/*
@@ -16,16 +19,34 @@ double uniform(double min, double max) {
 	return n;
 }
 
+void seleciona(bool *selecionado, Info *carta, Rectangle *selecRec){
+	if(GetMouseX() > (int) carta->loc.x &&
+	   GetMouseX() < (int) carta->loc.x + (int) carta->tam.width && 
+	   GetMouseY() > (int) carta->loc.y && 
+	   GetMouseY() < (int) carta->loc.x + (int) carta->tam.height){
+		if(IsMouseButtonPressed(0)){
+			if(selecionado) selecionado = 0;
+			else{
+				selecRec->x = carta->loc.x;
+				selecRec->y = carta->loc.y;
+				selecRec->x = carta->loc.x;
+				selecRec->y = carta->loc.y;
+				selecRec->width = carta->tam.width;
+				selecRec->height = carta->tam.height;
+				*selecionado = 1;
+			}
+		}
+	}
+}
 
+/*
+Aqui vou guardar a função pq vou testar a nova e não quero perder a antiga
 
-
-
-/*void seleciona(bool *selecionado, Carta carta, Rectangle *selecRec){
-	if(GetMouseX() > (int) carta.loc.x &&
-			   GetMouseX() < (int) cartas[0][11].loc.x + (int) cartas[0][11].tam.width && 
-			   GetMouseY() > (int) cartas[0][11].loc.y && 
+if(GetMouseX() > (int) cartas[0][11].loc.x &&
+			   GetMouseX() < (int) cartas[0][11].loc.x + (int) cartas[0][11].tam.width &&
+			   GetMouseY() > (int) cartas[0][11].loc.y &&
 			   GetMouseY() < (int) cartas[0][11].loc.x + (int) cartas[0][11].tam.height){
-			   
+
 				if(IsMouseButtonPressed(0)){
 					   if(selecionado) selecionado = 0;
 					   else{
@@ -39,5 +60,9 @@ double uniform(double min, double max) {
 					   }
 				}
 			}
-}*/
+
+*/
+
+
+
 

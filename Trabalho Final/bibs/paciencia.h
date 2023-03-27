@@ -18,5 +18,7 @@ typedef struct nodoLEnc{
 } NodoLEnc;
 
 double uniform(double min, double max);
+void seleciona(bool *selecionado, Info *carta, Rectangle *selecRec);
+
 
 #endif

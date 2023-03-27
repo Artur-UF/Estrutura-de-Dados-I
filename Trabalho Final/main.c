@@ -1,5 +1,8 @@
 /*
+Para compilar em linux:
+
 gcc main.c bibs/fila_enc.c bibs/pilha_enc.c bibs/paciencia.c bibs/lista_cont.c -I/usr/local/include -L/usr/local/lib /usr/local/lib/libraylib.so.4.2.0
+
 */
 #include <stdlib.h>
 #include <math.h>
@@ -19,8 +22,8 @@ gcc main.c bibs/fila_enc.c bibs/pilha_enc.c bibs/paciencia.c bibs/lista_cont.c -
 int main(void){
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 1300;
-    const int screenHeight = 700;
+    const int screenWidth = 1900;
+    const int screenHeight = 900;
 	
 	float deckscale = screenWidth/3000.;
 	float backscale = screenWidth/9600.;
@@ -52,16 +55,17 @@ int main(void){
 			cartas[i][j].tam = teste;
 			cartas[i][j].naipe = i;
 			cartas[i][j].num = j;
-			cartas[i][j].status = 1;
+			cartas[i][j].status = 0;
 
 			// Baralho de baixo
 			cartas[i+4][j].tam = teste;
 			cartas[i+4][j].naipe = i;
 			cartas[i+4][j].num = j;
-			cartas[i+4][j].status = 1;
+			cartas[i+4][j].status = 0;
 		}
 	}
 	
+	// Cria uma lista para auxiliar na criação de outras coisas
 	ListaCont baralhos;
 	criaListaCont(&baralhos);
 	for(int i = 0; i <= 7; i++){
@@ -82,15 +86,43 @@ int main(void){
 		removePosListaCont(&baralhos, randint);
 	}
 	
-	/*
 	
-	AQUI PODEMOS CRIAR AS OUTRAS PILHAS
+	// Criando as Pilhas
+	PilhaEnc *pilhas[10];
 	
-	*/
-
+	for(int i = 0; i < 10; ++i){
+		pilhas[i] = criaPilhaEnc();
+		if(i < 4){
+			while(pilhas[i]->tamanho < 6){
+				randint = (int) uniform(0, tamanhoListaCont(baralhos));
+				empilhaPilhaEnc(pilhas[i], baralhos.nodos[randint]);
+				removePosListaCont(&baralhos, randint);
+			}
+		}
+		if(i >= 4){
+			while(pilhas[i]->tamanho < 5){
+				randint = (int) uniform(0, tamanhoListaCont(baralhos));
+				empilhaPilhaEnc(pilhas[i], baralhos.nodos[randint]);
+				removePosListaCont(&baralhos, randint);
+			}
+		}
+	}
+	
+	// Criando as filas
+	FilaEnc *filas[10];
+	for(int i = 0; i < 10; ++i){
+		filas[i] = criaFilaEnc();
+		enfileiraFilaEnc(filas[i], desempilhaPilhaEnc(pilhas[i]));
+		filas[i]->fim->info.status = 1;
+	}
+	
+	// Destroi a lista de baralhos que ajudou ali
+	destroiListaCont(&baralhos);
+	
 	printf("\n***Tamanho do monte: %d***\n\n", monte->tamanho);
 	
-	/*// Loop que imprime informações do monte
+	/*
+	// Loop que imprime informações do monte
 	Info infoAux;
 	while (!vaziaPilhaEnc(monte)){
 		infoAux = desempilhaPilhaEnc(monte);
@@ -103,6 +135,9 @@ int main(void){
 
 	// Posicionamento das colunas
 	float inicioY = 2*espaco+altcarta;
+	int tamanhoPilha;
+	Vector2 vetorAux;
+	
 
 	Vector2 vec = {espaco, inicioY+30.};
 	cartas[0][12].loc = vec;
@@ -115,48 +150,42 @@ int main(void){
 	Rectangle selecRec;
 
 	bool selecionado = 0;
+	
+	// Retanculos brancos
+	Rectangle rec = {0, 0, largcarta, altcarta};	
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
-	Rectangle rec = {0, 0, largcarta, altcarta};
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         BeginDrawing();
-
+			
+			// Desenha os retangulos brancos
             ClearBackground(DARKGREEN);
             for(int i = 2; i < 10; ++i){
             	base.x = (i+1)*espaco + i*largcarta;
-            	base.y = 20;
+            	base.y = espaco;
             	base.width = largcarta;
             	base.height = altcarta;
             	DrawRectangleRoundedLines(base, 0.15, 5, 3, WHITE);
             }
 
+			// Desenha o monte
 			DrawTexture(back, espaco, espaco, WHITE);
-
-            DrawTexture(back, espaco, inicioY, WHITE);
-			DrawTextureRec(deck, cartas[0][12].tam, vec, WHITE);
-			DrawTextureRec(deck, cartas[0][11].tam, vec2, WHITE);
-
-			if(GetMouseX() > (int) cartas[0][11].loc.x &&
-			   GetMouseX() < (int) cartas[0][11].loc.x + (int) cartas[0][11].tam.width &&
-			   GetMouseY() > (int) cartas[0][11].loc.y &&
-			   GetMouseY() < (int) cartas[0][11].loc.x + (int) cartas[0][11].tam.height){
-
-				if(IsMouseButtonPressed(0)){
-					   if(selecionado) selecionado = 0;
-					   else{
-						   selecRet.x = cartas[0][11].loc.x;
-						   selecRet.y = cartas[0][11].loc.y;
-						   selecRec.x = cartas[0][11].loc.x;
-						   selecRec.y = cartas[0][11].loc.y;
-						   selecRec.width = cartas[0][11].tam.width;
-						   selecRec.height = cartas[0][11].tam.height;
-						   selecionado = 1;
-					   }
+			
+			// Desenha as pilhas viradas para baixo
+			for(int i = 0; i < 10; ++i){
+				for(int j = 0; j < pilhas[i]->tamanho; ++j){
+					vetorAux.x = espaco + (i*(largcarta+espaco));
+					vetorAux.y = 2*espaco + altcarta + (j*(altcarta/4.));
+					DrawTexture(back, vetorAux.x, vetorAux.y, WHITE);
 				}
 			}
+
+//			seleciona(&selecionado, )
+			
 			if(selecionado){
 				DrawRectangleRoundedLines(selecRec, 0.15, 5, 2, RED);
 			}
