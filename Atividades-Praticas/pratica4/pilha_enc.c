@@ -88,6 +88,31 @@ void invertePilhaEncBonus(PilhaEnc *pilha){
 	destroiFilaEnc(filaAux);
 }
 
+// Função que retorna uma cópia de uma fila invertida
+PilhaEnc* copiaPilhaEnc(PilhaEnc *pilha){
+	PilhaEnc *pilhaCopia;
+	pilhaCopia = criaPilhaEnc();
+
+	PilhaEnc *pilhaAux;
+	pilhaAux = criaPilhaEnc();
+	
+	Info infoaux;	
+
+	while(!vaziaPilhaEnc(pilha)){
+		printf("Oi\n");
+		empilhaPilhaEnc(pilhaAux, desempilhaPilhaEnc(pilha));
+ 	}
+	
+	while(!vaziaPilhaEnc(pilhaAux)){
+		infoaux = desempilhaPilhaEnc(pilhaAux);
+		empilhaPilhaEnc(pilha, infoaux);
+		empilhaPilhaEnc(pilhaCopia, infoaux);	
+	}
+
+	destroiPilhaEnc(pilhaAux);
+
+	return pilhaCopia;
+}
 
 
 

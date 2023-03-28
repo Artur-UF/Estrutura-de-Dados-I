@@ -9,6 +9,9 @@ int main(){
    PilhaEnc *pilha;
    pilha = criaPilhaEnc();
 
+   PilhaEnc *pilhacopia;
+   pilhacopia = criaPilhaEnc();
+
    FilaEnc *fila;
    fila = criaFilaEnc();
 
@@ -28,13 +31,23 @@ int main(){
    empilhaPilhaEnc(pilha, info4); 
    empilhaPilhaEnc(pilha, info5);
 
-   printf("\nPilha original.\n");
 
+   pilhacopia = copiaPilhaEnc(pilha);
+   
+   printf("\nPilha original.\n");   
    while (!vaziaPilhaEnc(pilha)){
       infoAux = desempilhaPilhaEnc(pilha);
       printf("%d | %s (%s)\n", infoAux.matricula, infoAux.nome, infoAux.email);   
    }
+   
+   printf("\nPilha copia.\n");   
+   while (!vaziaPilhaEnc(pilhacopia)){
+      infoAux = desempilhaPilhaEnc(pilhacopia);
+      printf("%d | %s (%s)\n", infoAux.matricula, infoAux.nome, infoAux.email);   
+   }
 
+   
+/*
    empilhaPilhaEnc(pilha, info1); 
    empilhaPilhaEnc(pilha, info2); 
    empilhaPilhaEnc(pilha, info3); 
@@ -84,7 +97,7 @@ int main(){
       printf("%d | %s (%s)\n", infoAux.matricula, infoAux.nome, infoAux.email);   
    }
    
-
+*/
    printf("cabou\n");
    
    destroiFilaEnc(fila);

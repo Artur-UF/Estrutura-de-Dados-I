@@ -28,4 +28,7 @@ int vaziaFilaEnc(FilaEnc* fila);
 // Retorna a cópia de uma fila invertida
 FilaEnc* copiaInvertidaFilaEnc(FilaEnc *fila);
 
+// Retorna uma cópia de uma fila
+FilaEnc* copiaFilaEnc(FilaEnc *fila);
+
 #endif

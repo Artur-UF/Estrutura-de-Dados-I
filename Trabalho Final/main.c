@@ -41,6 +41,8 @@ int main(void){
 	float largcarta = deck.width/13.;
 	float altcarta = deck.height/4.;
 
+	float espaco = (screenWidth - 10*largcarta)/11;
+
 	Info cartas[8][13];
 	Rectangle teste;
 
@@ -89,19 +91,24 @@ int main(void){
 	
 	// Criando as Pilhas
 	PilhaEnc *pilhas[10];
+	PilhaEnc *pilhasAux[10];
 	
 	for(int i = 0; i < 10; ++i){
 		pilhas[i] = criaPilhaEnc();
 		if(i < 4){
-			while(pilhas[i]->tamanho < 6){
+			for(int j = 0; j < 6; ++j){
 				randint = (int) uniform(0, tamanhoListaCont(baralhos));
+				baralhos.nodos[randint].loc.x = espaco + i*(espaco+largcarta);
+				baralhos.nodos[randint].loc.y = 2*espaco + altcarta + j*(altcarta/5.);
 				empilhaPilhaEnc(pilhas[i], baralhos.nodos[randint]);
 				removePosListaCont(&baralhos, randint);
 			}
 		}
 		if(i >= 4){
-			while(pilhas[i]->tamanho < 5){
+			for(int j = 0; j < 5; ++j){
 				randint = (int) uniform(0, tamanhoListaCont(baralhos));
+				baralhos.nodos[randint].loc.x = espaco + i*(espaco+largcarta);
+				baralhos.nodos[randint].loc.y = 2*espaco + altcarta + j*(altcarta/5.);
 				empilhaPilhaEnc(pilhas[i], baralhos.nodos[randint]);
 				removePosListaCont(&baralhos, randint);
 			}
@@ -116,22 +123,21 @@ int main(void){
 		filas[i]->fim->info.status = 1;
 	}
 	
+	FilaEnc *filasAux[10];
+	Info cartaAux;
+	
 	// Destroi a lista de baralhos que ajudou ali
 	destroiListaCont(&baralhos);
 	
 	printf("\n***Tamanho do monte: %d***\n\n", monte->tamanho);
 	
-	/*
+	
 	// Loop que imprime informações do monte
 	Info infoAux;
-	while (!vaziaPilhaEnc(monte)){
-		infoAux = desempilhaPilhaEnc(monte);
-		printf("| %d | %d | %d |\n", infoAux.naipe, infoAux.num, infoAux.status);   
-	}*/
-
+	
 	// Retangulo no tabuleiro
 	Rectangle base;
-	float espaco = (screenWidth - 10*largcarta)/11;
+
 
 	// Posicionamento das colunas
 	float inicioY = 2*espaco+altcarta;
@@ -156,7 +162,7 @@ int main(void){
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
-
+	
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -177,13 +183,24 @@ int main(void){
 			
 			// Desenha as pilhas viradas para baixo
 			for(int i = 0; i < 10; ++i){
+				pilhasAux[i] = copiaPilhaEnc(pilhas[i]);
+				invertePilhaEnc(pilhasAux[i]);
 				for(int j = 0; j < pilhas[i]->tamanho; ++j){
-					vetorAux.x = espaco + (i*(largcarta+espaco));
-					vetorAux.y = 2*espaco + altcarta + (j*(altcarta/4.));
-					DrawTexture(back, vetorAux.x, vetorAux.y, WHITE);
+					cartaAux = desempilhaPilhaEnc(pilhasAux[i]);
+					DrawTexture(back, cartaAux.loc.x, cartaAux.loc.y, WHITE);
 				}
 			}
-
+			
+			// Desenha filas
+			for(int i = 0; i < 10; ++i){
+				filasAux[i] = copiaFilaEnc(filas[i]);
+				for(int j = 0; j < filasAux[i]->tamanho; ++j){
+					cartaAux = desenfileiraFilaEnc(filasAux[i]);
+					DrawTextureRec(deck, cartaAux.tam, cartaAux.loc, WHITE);
+				}
+			}
+			
+			
 //			seleciona(&selecionado, )
 			
 			if(selecionado){

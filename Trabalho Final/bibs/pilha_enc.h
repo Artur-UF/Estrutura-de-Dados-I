@@ -28,5 +28,6 @@ int vaziaPilhaEnc(PilhaEnc* pilha);
 void invertePilhaEnc(PilhaEnc *pilha);
 void invertePilhaEncBonus(PilhaEnc *pilha);
 
+PilhaEnc* copiaPilhaEnc(PilhaEnc *pilha);
 
 #endif

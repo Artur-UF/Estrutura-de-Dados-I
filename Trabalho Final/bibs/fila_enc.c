@@ -60,8 +60,8 @@ int vaziaFilaEnc(FilaEnc *fila){
 
 // Função que retorna uma cópia de uma fila invertida
 FilaEnc* copiaInvertidaFilaEnc(FilaEnc *fila){
-	FilaEnc *filaInv;
-	filaInv = criaFilaEnc();
+	FilaEnc *filaCopia;
+	filaCopia = criaFilaEnc();
 
 	PilhaEnc *pilhaAux;
 	pilhaAux = criaPilhaEnc();
@@ -82,15 +82,40 @@ FilaEnc* copiaInvertidaFilaEnc(FilaEnc *fila){
 	}
 
 	while(!vaziaPilhaEnc(pilhaAux)){
-		enfileiraFilaEnc(filaInv, desempilhaPilhaEnc(pilhaAux));
+		enfileiraFilaEnc(filaCopia, desempilhaPilhaEnc(pilhaAux));
 	}
 
 	destroiFilaEnc(filaAux);
 	destroiPilhaEnc(pilhaAux);
 
-	return filaInv;
+	return filaCopia;
 }
 
+
+// Função que retorna uma cópia de uma fila invertida
+FilaEnc* copiaFilaEnc(FilaEnc *fila){
+	FilaEnc *filaCopia;
+	filaCopia = criaFilaEnc();
+
+	FilaEnc *filaAux;
+	filaAux = criaFilaEnc();
+	
+	Info infoaux;	
+
+	while(!vaziaFilaEnc(fila)){
+		infoaux = desenfileiraFilaEnc(fila);
+		enfileiraFilaEnc(filaCopia, infoaux);
+		enfileiraFilaEnc(filaAux, infoaux);
+	}
+	
+	while(!vaziaFilaEnc(filaAux)){
+		enfileiraFilaEnc(fila, desenfileiraFilaEnc(filaAux));	
+	}
+
+	destroiFilaEnc(filaAux);
+
+	return filaCopia;
+}
 
 
 
