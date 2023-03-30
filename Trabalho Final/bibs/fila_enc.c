@@ -113,7 +113,6 @@ FilaEnc* copiaFilaEnc(FilaEnc *fila){
 	}
 
 	destroiFilaEnc(filaAux);
-
 	return filaCopia;
 }
 

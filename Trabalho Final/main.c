@@ -22,7 +22,7 @@ gcc main.c bibs/fila_enc.c bibs/pilha_enc.c bibs/paciencia.c bibs/lista_cont.c -
 int main(void){
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 1900;
+    const int screenWidth = 1700;
     const int screenHeight = 900;
 	
 	float deckscale = screenWidth/3000.;
@@ -152,10 +152,12 @@ int main(void){
 	cartas[0][11].loc = vec2;
 
 	// Retangulo da carta selecionada
-	Vector2 selecRet;
+	Vector2 selecVet;
 	Rectangle selecRec;
 
 	bool selecionado = 0;
+	bool comprar = 0;
+	bool monteVazio = 0;
 	
 	// Retanculos brancos
 	Rectangle rec = {0, 0, largcarta, altcarta};	
@@ -179,7 +181,34 @@ int main(void){
             }
 
 			// Desenha o monte
-			DrawTexture(back, espaco, espaco, WHITE);
+			if(!monteVazio) DrawTexture(back, espaco, espaco, WHITE);
+			
+			// Faz a compra
+			if(GetMouseX() > (int) espaco &&
+			   GetMouseX() < (int) espaco + largcarta &&
+			   GetMouseY() > (int) espaco &&
+			   GetMouseY() < (int) espaco + altcarta){
+				if(IsMouseButtonPressed(0)){
+				   selecRec.x = espaco;
+				   selecRec.y = espaco;
+				   selecRec.width = largcarta;
+				   selecRec.height = altcarta;
+				   comprar = 1;
+				}
+			}
+			if(comprar){
+				DrawRectangleRoundedLines(selecRec, 0.1, 5, 7, RED);
+				if(!vaziaPilhaEnc(monte)){
+					for(int i = 0; i < 10; ++i){
+						cartaAux = desempilhaPilhaEnc(monte);
+						cartaAux.loc.x = espaco + i*(espaco + largcarta);
+						cartaAux.loc.y = 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + filas[i]->tamanho*(altcarta/5.);
+						enfileiraFilaEnc(filas[i], cartaAux);
+					}
+				}
+				if(vaziaPilhaEnc(monte)) monteVazio = 1;
+				comprar = 0;
+			}
 			
 			// Desenha as pilhas viradas para baixo
 			for(int i = 0; i < 10; ++i){
@@ -194,7 +223,7 @@ int main(void){
 			// Desenha filas
 			for(int i = 0; i < 10; ++i){
 				filasAux[i] = copiaFilaEnc(filas[i]);
-				for(int j = 0; j < filasAux[i]->tamanho; ++j){
+				for(int j = 0; j < filas[i]->tamanho; ++j){
 					cartaAux = desenfileiraFilaEnc(filasAux[i]);
 					DrawTextureRec(deck, cartaAux.tam, cartaAux.loc, WHITE);
 				}
@@ -204,7 +233,7 @@ int main(void){
 //			seleciona(&selecionado, )
 			
 			if(selecionado){
-				DrawRectangleRoundedLines(selecRec, 0.15, 5, 2, RED);
+				DrawRectangleRoundedLines(selecRec, 0.1, 5, 7, RED);
 			}
 
         EndDrawing();
