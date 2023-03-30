@@ -61,6 +61,49 @@ if(GetMouseX() > (int) cartas[0][11].loc.x &&
 				}
 			}
 
+			// Seleçao de carta
+			for(i = 0; i < 10; ++i){
+				// Seleciona qual fila verificar
+				if(GetMouseX() > espaco + i*(espaco + largcarta) &&
+					GetMouseX() < espaco + i*(espaco + largcarta) + largcarta){
+					if(GetMouseY() > pilhas[i]->topo->info.loc.y + altcarta/5. &&
+						GetMouseY() < filas[i]->fim->info.loc.y + altcarta){
+						for(i = 0; i < filas[i]->tamanho; ++i){
+							cartaAux = desenfileiraFilaEnc(filasAux[i]);
+							if(vaziaFilaEnc(filasAux[i])){
+								if(GetMouseY() > cartaAux.loc.y &&
+									GetMouseY() < cartaAux.loc.y + altcarta){
+										if(IsMouseButtonPressed(0)){
+											if(selecionado) selecionado = 0;
+											else{
+												selecRec.x = espaco + i*(espaco + largcarta);
+												selecRec.y = cartaAux.loc.y;
+												selecRec.height = altcarta; 
+												selecRec.width = largcarta;
+												selecionado = 1;
+											}
+										}										
+									}
+							}
+							else{
+								if(GetMouseY() > cartaAux.loc.y &&
+									GetMouseY() < cartaAux.loc.y + (altcarta/5.)){
+									if(IsMouseButtonPressed(0)){
+										if(selecionado) selecionado = 0;
+										else{
+											selecRec.x = espaco + i*(espaco + largcarta);
+											selecRec.y = cartaAux.loc.y;
+											selecRec.height = altcarta; 
+											selecRec.width = largcarta;
+											selecionado = 1;
+										}
+									}									
+								}		
+							}
+						}
+					}
+				}
+			}
 */
 
 

@@ -152,11 +152,12 @@ int main(void){
 	cartas[0][11].loc = vec2;
 
 	// Retangulo da carta selecionada
-	Vector2 selecVet;
+	Vector2 selecVet, mouseVet;
 	Rectangle selecRec;
 
+	int i, j;
+	int contacarta;
 	bool selecionado = 0;
-	bool comprar = 0;
 	bool monteVazio = 0;
 	
 	// Retanculos brancos
@@ -172,7 +173,7 @@ int main(void){
 			
 			// Desenha os retangulos brancos
             ClearBackground(DARKGREEN);
-            for(int i = 2; i < 10; ++i){
+            for(i = 2; i < 10; ++i){
             	base.x = (i+1)*espaco + i*largcarta;
             	base.y = espaco;
             	base.width = largcarta;
@@ -189,46 +190,56 @@ int main(void){
 			   GetMouseY() > (int) espaco &&
 			   GetMouseY() < (int) espaco + altcarta){
 				if(IsMouseButtonPressed(0)){
-				   selecRec.x = espaco;
-				   selecRec.y = espaco;
-				   selecRec.width = largcarta;
-				   selecRec.height = altcarta;
-				   comprar = 1;
-				}
-			}
-			if(comprar){
-				DrawRectangleRoundedLines(selecRec, 0.1, 5, 7, RED);
-				if(!vaziaPilhaEnc(monte)){
-					for(int i = 0; i < 10; ++i){
-						cartaAux = desempilhaPilhaEnc(monte);
-						cartaAux.loc.x = espaco + i*(espaco + largcarta);
-						cartaAux.loc.y = 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + filas[i]->tamanho*(altcarta/5.);
-						enfileiraFilaEnc(filas[i], cartaAux);
+					if(!vaziaPilhaEnc(monte)){
+						for(i = 0; i < 10; ++i){
+							cartaAux = desempilhaPilhaEnc(monte);
+							cartaAux.loc.x = espaco + i*(espaco + largcarta);
+							cartaAux.loc.y = 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + filas[i]->tamanho*(altcarta/5.);
+							enfileiraFilaEnc(filas[i], cartaAux);
+						}
 					}
+					if(vaziaPilhaEnc(monte)) monteVazio = 1;
 				}
-				if(vaziaPilhaEnc(monte)) monteVazio = 1;
-				comprar = 0;
 			}
-			
+		
 			// Desenha as pilhas viradas para baixo
-			for(int i = 0; i < 10; ++i){
+			for(i = 0; i < 10; ++i){
 				pilhasAux[i] = copiaPilhaEnc(pilhas[i]);
 				invertePilhaEnc(pilhasAux[i]);
-				for(int j = 0; j < pilhas[i]->tamanho; ++j){
+				for(j = 0; j < pilhas[i]->tamanho; ++j){
 					cartaAux = desempilhaPilhaEnc(pilhasAux[i]);
 					DrawTexture(back, cartaAux.loc.x, cartaAux.loc.y, WHITE);
 				}
 			}
 			
 			// Desenha filas
-			for(int i = 0; i < 10; ++i){
+			for(i = 0; i < 10; ++i){
 				filasAux[i] = copiaFilaEnc(filas[i]);
-				for(int j = 0; j < filas[i]->tamanho; ++j){
+				for(j = 0; j < filas[i]->tamanho; ++j){
 					cartaAux = desenfileiraFilaEnc(filasAux[i]);
 					DrawTextureRec(deck, cartaAux.tam, cartaAux.loc, WHITE);
 				}
 			}
 			
+			// Seleçao de carta
+			for(i = 0; i < 10; ++i){
+				// Seleciona qual fila verificar
+				if(GetMouseX() > espaco + i*(espaco + largcarta) &&
+					GetMouseX() < espaco + i*(espaco + largcarta) + largcarta){
+					for(j = 1; j < filas[j]->tamanho; ++j){
+						if(filas[i]->tamanho == 1){
+							if(GetMouseY() > pilhas[i]->topo->info.loc.y + altcarta/5. &&
+								GetMouseY() < pilhas[i]->topo->info.loc.y + altcarta/5. + altcarta){
+								contacarta = 0;
+							}
+						}								
+						else{
+							if(GetMouseY() > pilhas[i]->topo->info.loc.y + altcarta/5. + (j-1)*(altcarta/5.)
+								GetMouseY() < (pilhas[i]->topo->info.loc.y + altcarta/5.) + j*(atlcarta/5.))
+						}
+					}					
+				}
+			}
 			
 //			seleciona(&selecionado, )
 			
