@@ -156,7 +156,8 @@ int main(void){
 	Rectangle selecRec;
 
 	int i, j;
-	int contacarta;
+	int contacarta, contafila;
+	bool cartavalida = 0;
 	bool selecionado = 0;
 	bool monteVazio = 0;
 	
@@ -226,21 +227,52 @@ int main(void){
 				// Seleciona qual fila verificar
 				if(GetMouseX() > espaco + i*(espaco + largcarta) &&
 					GetMouseX() < espaco + i*(espaco + largcarta) + largcarta){
-					for(j = 1; j < filas[j]->tamanho; ++j){
+					for(j = 0; j < filas[j]->tamanho; ++j){
 						if(filas[i]->tamanho == 1){
 							if(GetMouseY() > pilhas[i]->topo->info.loc.y + altcarta/5. &&
 								GetMouseY() < pilhas[i]->topo->info.loc.y + altcarta/5. + altcarta){
 								contacarta = 0;
+								contafila = i;
+								cartavalida = 1;
+							}
+						}
+						else if(filas[i]->tamanho > 1 && j == filas[i]->tamanho-1){
+							if(GetMouseY() > pilhas[i]->topo->info.loc.y + altcarta/5. + j*(altcarta/5.) &&
+								GetMouseY() < (pilhas[i]->topo->info.loc.y + altcarta/5.) + (j+1)*(altcarta/5.) + (4./5.)*altcarta){
+								contacarta = j;
+								contafila = i;
+								cartavalida = 1;
 							}
 						}								
 						else{
-							if(GetMouseY() > pilhas[i]->topo->info.loc.y + altcarta/5. + (j-1)*(altcarta/5.)
-								GetMouseY() < (pilhas[i]->topo->info.loc.y + altcarta/5.) + j*(atlcarta/5.))
+							if(GetMouseY() > pilhas[i]->topo->info.loc.y + altcarta/5. + j*(altcarta/5.) &&
+								GetMouseY() < (pilhas[i]->topo->info.loc.y + altcarta/5.) + (j+1)*(altcarta/5.)){
+								contacarta = j;
+								contafila = i;
+								cartavalida = 1;
+							}
 						}
-					}					
+					}
 				}
 			}
-			
+			if(cartavalida){
+				filasAux[contafila] = copiaFilaEnc(filas[contafila]);
+				for(i = 0; i < contacarta; ++i){
+					desenfileiraFilaEnc(filasAux[contafila]);
+				}
+				cartaAux = filasAux[contafila]->ini->info;
+				if(IsMouseButtonPressed(0)){
+					if(selecionado) selecionado = 0;
+					else{
+						selecRec.x = espaco + contafila*(espaco + largcarta);
+						selecRec.y = cartaAux.loc.y;
+						selecRec.height = altcarta + (filasAux[contafila]->tamanho - 1)*(altcarta/5.); 
+						selecRec.width = largcarta;
+						selecionado = 1;
+					}
+				}
+				cartavalida = 0;
+			}
 //			seleciona(&selecionado, )
 			
 			if(selecionado){
