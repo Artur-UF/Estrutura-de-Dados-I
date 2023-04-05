@@ -266,16 +266,53 @@ int main(void){
 
 			// Desenha filas
 			for(i = 0; i < 10; ++i){
-				if(vaziaFilaEnc(filas[i])){
+				if(vaziaFilaEnc(filas[i]) && !vaziaPilhaEnc(pilhas[i])){
 					enfileiraFilaEnc(filas[i], desempilhaPilhaEnc(pilhas[i]));
-				}
-				filasAux[i] = copiaFilaEnc(filas[i]);
-				for(j = 0; j < filas[i]->tamanho; ++j){
-					cartaAux = desenfileiraFilaEnc(filasAux[i]);
-					DrawTextureRec(deck, cartaAux.tam, cartaAux.loc, WHITE);
+				}else if(!vaziaFilaEnc(filas[i])){
+					filasAux[i] = copiaFilaEnc(filas[i]);
+					for(j = 0; j < filas[i]->tamanho; ++j){
+						cartaAux = desenfileiraFilaEnc(filasAux[i]);
+						DrawTextureRec(deck, cartaAux.tam, cartaAux.loc, WHITE);
+					}
 				}
 			}
 
+			
+			// Faz jogada
+			if(selecionado){
+				if(IsMouseButtonPressed(0)){
+					for(i = 0; i < 10; ++i){
+						if(GetMouseX() > espaco + i*(largcarta + espaco) &&
+							GetMouseX() < espaco + i*(largcarta + espaco) + largcarta &&
+							GetMouseY() > 2*espaco + altcarta && 
+							GetMouseY() < 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + filas[i]->tamanho*(altcarta/5.) + 	
+											(4./5.)*altcarta){
+							if(filas[i]->fim->info.num == 1 + cartaSelecionada.num){
+								destroiFilaEnc(filasAux[filaSelec]);
+								filasAux[filaSelec] = copiaFilaEnc(filas[filaSelec]);
+								destroiFilaEnc(filas[filaSelec]);
+								criaFilaEnc(filas[filaSelec]);
+								j = 0;
+								while(!vaziaFilaEnc(filasAux[filaSelec])){
+									if(j < cartaSelec){
+										enfileiraFilaEnc(filas[filaSelec], desenfileiraFilaEnc(filasAux[filaSelec]));
+									}else{
+										cartaAux2 = desenfileiraFilaEnc(filasAux[filaSelec]);
+										cartaAux2.loc.x = espaco + i*(espaco + largcarta);
+										cartaAux2.loc.y = 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + 
+															filas[i]->tamanho*(altcarta/5.);
+										enfileiraFilaEnc(filas[i], cartaAux2);
+									}
+									++j;
+								}
+							}
+						}
+					}
+				selecionado = 0;
+				}
+			}
+			
+			// Seleciona carta
 			cartavalida = mouseEmFila(filas, pilhas, &contafila, &contacarta, geometria);
 			
 			if(cartavalida){
@@ -284,6 +321,7 @@ int main(void){
 					desenfileiraFilaEnc(filasAux[contafila]);
 				}
 				sequenciavalida = confereOrdem(filasAux[contafila]);
+				printf("fila [%d] | carta [%d] | Sequencia = %d\n", contafila, contacarta, sequenciavalida);
 				cartaAux = filasAux[contafila]->ini->info;
 				if(sequenciavalida && IsMouseButtonPressed(0)){
 					cartaSelecionada = cartaAux;
@@ -298,44 +336,6 @@ int main(void){
 				cartavalida = 0;
 			}
 			
-			if(selecionado){
-				if(IsMouseButtonPressed(0)){
-					for(i = 0; i < 10; ++i){
-						if(GetMouseX() > espaco + i*(largcarta + espaco) &&
-							GetMouseX() < espaco + i*(largcarta + espaco) + largcarta &&
-							GetMouseY() > 2*espaco + altcarta && 
-							GetMouseY() < 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + filas[i]->tamanho*(altcarta/5.) + 	
-											(4./5.)*altcarta){
-							if(filas[i]->fim->info.num == 1 + cartaSelecionada.num){
-								printf("To na fila certa\n");
-								
-								destroiFilaEnc(filasAux[filaSelec]);
-								filasAux[filaSelec] = copiaFilaEnc(filas[filaSelec]);
-								destroiFilaEnc(filas[filaSelec]);
-								criaFilaEnc(filas[filaSelec]);
-								j = 0;
-								printf("Carta Selecionada = %d\nFila selecionada = %d\n", cartaSelec, filaSelec);
-								while(!vaziaFilaEnc(filasAux[filaSelec])){
-									if(j < cartaSelec){
-										printf("montei a fila origem\n");
-										enfileiraFilaEnc(filas[filaSelec], desenfileiraFilaEnc(filasAux[filaSelec]));
-									}else{
-										printf("Adicionei na fila destino\n");
-										cartaAux2 = desenfileiraFilaEnc(filasAux[filaSelec]);
-										cartaAux2.loc.x = espaco + i*(espaco + largcarta);
-										cartaAux2.loc.y = 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + 
-															filas[i]->tamanho*(altcarta/5.);
-										enfileiraFilaEnc(filas[i], cartaAux2);
-									}
-									printf("No while\n");
-									++j;
-								}
-								selecionado = 0;
-							}
-						}
-					}
-				}
-			}
 //			seleciona(&selecionado, )
 
 			if(selecionado){

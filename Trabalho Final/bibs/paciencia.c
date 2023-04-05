@@ -62,8 +62,10 @@ bool mouseEmFila(FilaEnc **filas, PilhaEnc **pilhas, int *contafila, int *contac
 	for(i = 0; i < 10; ++i){
 		// Seleciona qual fila verificar
 		if(GetMouseX() > espaco + i*(espaco + largcarta) &&
-			GetMouseX() < espaco + i*(espaco + largcarta) + largcarta){
-			for(j = 0; j < filas[j]->tamanho; ++j){
+			GetMouseX() < espaco + i*(espaco + largcarta) + largcarta &&
+			GetMouseY() > 2*espaco + altcarta){
+			for(j = 0; j < filas[i]->tamanho; ++j){
+				// Se a fila tiver uma carta ele olha a altura de uma carta inteira
 				if(filas[i]->tamanho == 1){
 					if(GetMouseY() > 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) &&
 						GetMouseY() < 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + altcarta){
@@ -72,14 +74,16 @@ bool mouseEmFila(FilaEnc **filas, PilhaEnc **pilhas, int *contafila, int *contac
 						return 1;
 					}
 				}
-				else if(filas[i]->tamanho > 1 && j == filas[i]->tamanho-1){
+				// Se for a ultima carta da fila ele olha a carta inteira tmb
+				else if(j > 0 && j == filas[i]->tamanho-1){
 					if(GetMouseY() > 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + j*(altcarta/5.) &&
-						GetMouseY() < 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + (j+1)*(altcarta/5.) + (4./5.)*altcarta){
+						GetMouseY() < 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + j*(altcarta/5.) + altcarta){
 						*contacarta = j;
 						*contafila = i;
 						return 1;
 					}
 				}
+				// Se for qualquer uma no meio ele olha só a janelinha
 				else{
 					if(GetMouseY() > 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + j*(altcarta/5.) &&
 						GetMouseY() < 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + (j+1)*(altcarta/5.)){
