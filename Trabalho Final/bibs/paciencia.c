@@ -3,10 +3,8 @@
 #include <time.h>
 #include <stdio.h>
 
-#include "raylib.h"
 #include "paciencia.h"
-#include "pilha_enc.h"
-#include "fila_enc.h"
+
 
 double uniform(double min, double max) {
 	/*
@@ -14,15 +12,15 @@ double uniform(double min, double max) {
 	*/
 	double random  = ((double) rand()) / RAND_MAX;
 	double range = (max - min) * random;
-	double n = range + min;	
-	
+	double n = range + min;
+
 	return n;
 }
 
 void seleciona(bool *selecionado, Info *carta, Rectangle *selecRec){
 	if(GetMouseX() > (int) carta->loc.x &&
-	   GetMouseX() < (int) carta->loc.x + (int) carta->tam.width && 
-	   GetMouseY() > (int) carta->loc.y && 
+	   GetMouseX() < (int) carta->loc.x + (int) carta->tam.width &&
+	   GetMouseY() > (int) carta->loc.y &&
 	   GetMouseY() < (int) carta->loc.x + (int) carta->tam.height){
 		if(IsMouseButtonPressed(0)){
 			if(selecionado) selecionado = 0;
@@ -39,72 +37,64 @@ void seleciona(bool *selecionado, Info *carta, Rectangle *selecRec){
 	}
 }
 
-/*
-Aqui vou guardar a função pq vou testar a nova e não quero perder a antiga
+int confereOrdem(FilaEnc *fila){
+    FilaEnc *filaConfere = copiaFilaEnc(fila);
+    Carta cartaAux1 = desenfileiraFilaEnc(filaConfere);
+    Carta cartaAux2;
+    while(filaConfere->tamanho > 0){
+        cartaAux2 = desenfileiraFilaEnc(filaConfere);
+        if(cartaAux2.naipe != cartaAux1.naipe || cartaAux2.num != (--cartaAux1.num)){
+            destroiFilaEnc(filaConfere);
+            return 0;
+        }
+        cartaAux1 = cartaAux2;
+    }
+    destroiFilaEnc(filaConfere);
+    return 1;
+}
 
-if(GetMouseX() > (int) cartas[0][11].loc.x &&
-			   GetMouseX() < (int) cartas[0][11].loc.x + (int) cartas[0][11].tam.width &&
-			   GetMouseY() > (int) cartas[0][11].loc.y &&
-			   GetMouseY() < (int) cartas[0][11].loc.x + (int) cartas[0][11].tam.height){
-
-				if(IsMouseButtonPressed(0)){
-					   if(selecionado) selecionado = 0;
-					   else{
-						   selecRet.x = cartas[0][11].loc.x;
-						   selecRet.y = cartas[0][11].loc.y;
-						   selecRec.x = cartas[0][11].loc.x;
-						   selecRec.y = cartas[0][11].loc.y;
-						   selecRec.width = cartas[0][11].tam.width;
-						   selecRec.height = cartas[0][11].tam.height;
-						   selecionado = 1;
-					   }
+bool mouseEmFila(FilaEnc **filas, PilhaEnc **pilhas, int *contafila, int *contacarta, float *geometria){
+	// Seleçao de carta
+	float largcarta = geometria[0];
+	float altcarta = geometria[1];
+	float espaco = geometria[2];
+	int i, j;
+	for(i = 0; i < 10; ++i){
+		// Seleciona qual fila verificar
+		if(GetMouseX() > espaco + i*(espaco + largcarta) &&
+			GetMouseX() < espaco + i*(espaco + largcarta) + largcarta){
+			for(j = 0; j < filas[j]->tamanho; ++j){
+				if(filas[i]->tamanho == 1){
+					if(GetMouseY() > 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) &&
+						GetMouseY() < 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + altcarta){
+						*contacarta = 0;
+						*contafila = i;
+						return 1;
+					}
 				}
-			}
-
-			// Seleçao de carta
-			for(i = 0; i < 10; ++i){
-				// Seleciona qual fila verificar
-				if(GetMouseX() > espaco + i*(espaco + largcarta) &&
-					GetMouseX() < espaco + i*(espaco + largcarta) + largcarta){
-					if(GetMouseY() > pilhas[i]->topo->info.loc.y + altcarta/5. &&
-						GetMouseY() < filas[i]->fim->info.loc.y + altcarta){
-						for(i = 0; i < filas[i]->tamanho; ++i){
-							cartaAux = desenfileiraFilaEnc(filasAux[i]);
-							if(vaziaFilaEnc(filasAux[i])){
-								if(GetMouseY() > cartaAux.loc.y &&
-									GetMouseY() < cartaAux.loc.y + altcarta){
-										if(IsMouseButtonPressed(0)){
-											if(selecionado) selecionado = 0;
-											else{
-												selecRec.x = espaco + i*(espaco + largcarta);
-												selecRec.y = cartaAux.loc.y;
-												selecRec.height = altcarta; 
-												selecRec.width = largcarta;
-												selecionado = 1;
-											}
-										}										
-									}
-							}
-							else{
-								if(GetMouseY() > cartaAux.loc.y &&
-									GetMouseY() < cartaAux.loc.y + (altcarta/5.)){
-									if(IsMouseButtonPressed(0)){
-										if(selecionado) selecionado = 0;
-										else{
-											selecRec.x = espaco + i*(espaco + largcarta);
-											selecRec.y = cartaAux.loc.y;
-											selecRec.height = altcarta; 
-											selecRec.width = largcarta;
-											selecionado = 1;
-										}
-									}									
-								}		
-							}
-						}
+				else if(filas[i]->tamanho > 1 && j == filas[i]->tamanho-1){
+					if(GetMouseY() > 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + j*(altcarta/5.) &&
+						GetMouseY() < 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + (j+1)*(altcarta/5.) + (4./5.)*altcarta){
+						*contacarta = j;
+						*contafila = i;
+						return 1;
+					}
+				}
+				else{
+					if(GetMouseY() > 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + j*(altcarta/5.) &&
+						GetMouseY() < 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + (j+1)*(altcarta/5.)){
+						*contacarta = j;
+						*contafila = i;
+						return 1;
 					}
 				}
 			}
-*/
+		}
+	}
+	return 0;
+}
+
+
 
 
 

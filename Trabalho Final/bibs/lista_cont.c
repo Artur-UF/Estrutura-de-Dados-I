@@ -1,5 +1,5 @@
-#include "lista_cont.h"
 #include <stdio.h>
+#include "lista_cont.h"
 
 // Funcao que cria uma lista
 void criaListaCont(ListaCont *lista){

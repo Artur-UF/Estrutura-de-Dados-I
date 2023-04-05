@@ -1,6 +1,6 @@
 #ifndef _LISTA_CONT_H_
 #define _LISTA_CONT_H_
-#include "paciencia.h"
+#include "defs.h"
 
 #define TAM_MAX_LISTA 104
 

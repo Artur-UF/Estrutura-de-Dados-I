@@ -1,7 +1,7 @@
-#include "pilha_enc.h"
-#include "fila_enc.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "pilha_enc.h"
+
 
 // Funcao que cria uma pilha
 PilhaEnc* criaPilhaEnc(){

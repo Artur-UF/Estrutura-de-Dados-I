@@ -1,6 +1,7 @@
 #ifndef _FILA_ENC_H_
 #define _FILA_ENC_H_
-#include "paciencia.h"
+#include "defs.h"
+#include "pilha_enc.h"
 
 typedef NodoLEnc NodoFEnc;
 
@@ -30,5 +31,7 @@ FilaEnc* copiaInvertidaFilaEnc(FilaEnc *fila);
 
 // Retorna uma cópia de uma fila
 FilaEnc* copiaFilaEnc(FilaEnc *fila);
+
+//int confereOrdem(FilaEnc *fila);
 
 #endif

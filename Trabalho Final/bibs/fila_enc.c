@@ -1,7 +1,7 @@
-#include "fila_enc.h"
-#include "pilha_enc.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "fila_enc.h"
+
 
 // Funcao que cria uma fila
 FilaEnc* criaFilaEnc(){
@@ -115,9 +115,23 @@ FilaEnc* copiaFilaEnc(FilaEnc *fila){
 	destroiFilaEnc(filaAux);
 	return filaCopia;
 }
-
-
-
+/*
+int confereOrdem(FilaEnc *fila){
+    FilaEnc *filaConfere = copiaFilaEnc(fila);
+    Carta cartaAux1 = desenfileiraFilaEnc(filaConfere);
+    Carta cartaAux2;
+    while(filaConfere->tamanho > 0){
+        cartaAux2 = desenfileiraFilaEnc(filaConfere);
+        if(cartaAux2.naipe != cartaAux1.naipe || cartaAux2.num != (--cartaAux1.num)){
+            destroiFilaEnc(filaConfere);
+            return 0;
+        }
+        cartaAux1 = cartaAux2;
+    }
+    destroiFilaEnc(filaConfere);
+    return 1;
+}
+*/
 
 
 

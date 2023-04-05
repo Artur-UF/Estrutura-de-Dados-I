@@ -1,6 +1,7 @@
 #ifndef _PILHA_ENC_H_
 #define _PILHA_ENC_H_
-#include "paciencia.h"
+#include "defs.h"
+#include "fila_enc.h"
 
 typedef NodoLEnc NodoPEnc;
 
