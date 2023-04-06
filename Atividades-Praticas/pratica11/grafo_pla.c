@@ -222,27 +222,3 @@ float caminhoMinimoPesadoComParadaGrafoPLA(GrafoPLA *grafo, int chOri, int chInt
 	return distancia;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -24,7 +24,7 @@ int main(void){
     // Initialization
     //--------------------------------------------------------------------------------------
 	float deckscale = SCREENWIDTH/3000.;
-	float backscale = SCREENWIDTH/9600.;
+	float backscale = SCREENWIDTH/9605.;
 
     InitWindow(SCREENWIDTH, SCREENHEIGHT, "Paciencia");
 	Image imdeck = LoadImage("imagens/deck.png");
@@ -334,7 +334,8 @@ int main(void){
 										cartaAux2 = desenfileiraFilaEnc(filasAux[filaSelec]);
 										cartaAux2.loc.x = espaco + i*(espaco + largcarta);
 										cartaAux2.loc.y = 2*espaco + altcarta +	filas[i]->tamanho*(altcarta/5.);
-										enfileiraFilaEnc(filas[i], cartaAux2);
+										enfileiraFilaEnc(filas[i],
+										 cartaAux2);
 									}
 									++j;
 								}
