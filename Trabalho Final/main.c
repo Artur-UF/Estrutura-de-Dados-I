@@ -26,7 +26,7 @@ int main(void){
 	float deckscale = SCREENWIDTH/3000.;
 	float backscale = SCREENWIDTH/9600.;
 
-    InitWindow(SCREENWIDTH, SCREENHEIGHT, "Paciência");
+    InitWindow(SCREENWIDTH, SCREENHEIGHT, "Paciencia");
 	Image imdeck = LoadImage("imagens/deck.png");
 	ImageResize(&imdeck, imdeck.width*deckscale, imdeck.height*deckscale);
 	Texture2D deck = LoadTextureFromImage(imdeck);
@@ -191,15 +191,8 @@ int main(void){
 	// Posicionamento das colunas
 	float inicioY = 2*espaco+altcarta;
 	int tamanhoPilha;
-	Vector2 vetorAux;
-
-
-	Vector2 vec = {espaco, inicioY+30.};
-
-	Vector2 vec2 = {espaco, inicioY+2.*30.};
 
 	// Retangulo da carta selecionada
-	Vector2 selecVet, mouseVet;
 	Rectangle selecRec;
 
 	int i, j, k;
@@ -209,6 +202,9 @@ int main(void){
 	bool selecionado = 0;
 	bool retSelec = 0;
 	bool monteVazio = 0;
+
+	// Controle de filas completas
+	int filasCompletas = 0;
 
 	// Retanculos brancos
 	Rectangle rec = {0, 0, largcarta, altcarta};
@@ -228,7 +224,11 @@ int main(void){
             	base.y = espaco;
             	base.width = largcarta;
             	base.height = altcarta;
-            	DrawRectangleRoundedLines(base, 0.15, 5, 3, WHITE);
+            	if(i >= 2+filasCompletas){
+	            	DrawRectangleRoundedLines(base, 0.15, 5, 3, WHITE);
+            	}else{
+            		DrawTexture(back, base.x, espaco, WHITE);
+            	}
             }
 
 			// Desenha o monte
@@ -276,34 +276,36 @@ int main(void){
 					}
 				}
 			}
-
 			
 			// Faz jogada
 			if(selecionado){
 				if(IsMouseButtonPressed(0)){
 					for(i = 0; i < 10; ++i){
-						if(GetMouseX() > espaco + i*(largcarta + espaco) &&
-							GetMouseX() < espaco + i*(largcarta + espaco) + largcarta &&
-							GetMouseY() > 2*espaco + altcarta && 
-							GetMouseY() < 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + filas[i]->tamanho*(altcarta/5.) + 	
-											(4./5.)*altcarta){
-							if(filas[i]->fim->info.num == 1 + cartaSelecionada.num){
-								destroiFilaEnc(filasAux[filaSelec]);
-								filasAux[filaSelec] = copiaFilaEnc(filas[filaSelec]);
-								destroiFilaEnc(filas[filaSelec]);
-								criaFilaEnc(filas[filaSelec]);
-								j = 0;
-								while(!vaziaFilaEnc(filasAux[filaSelec])){
-									if(j < cartaSelec){
-										enfileiraFilaEnc(filas[filaSelec], desenfileiraFilaEnc(filasAux[filaSelec]));
-									}else{
-										cartaAux2 = desenfileiraFilaEnc(filasAux[filaSelec]);
-										cartaAux2.loc.x = espaco + i*(espaco + largcarta);
-										cartaAux2.loc.y = 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + 
-															filas[i]->tamanho*(altcarta/5.);
-										enfileiraFilaEnc(filas[i], cartaAux2);
+						if(!vaziaFilaEnc(filas[i])){
+							if(GetMouseX() > espaco + i*(largcarta + espaco) &&
+								GetMouseX() < espaco + i*(largcarta + espaco) + largcarta &&
+								GetMouseY() > 2*espaco + altcarta && 
+								GetMouseY() < 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + filas[i]->tamanho*(altcarta/5.) + 	
+												(4./5.)*altcarta){
+								if(filas[i]->fim->info.num == 1 + cartaSelecionada.num){
+									destroiFilaEnc(filasAux[filaSelec]);
+									filasAux[filaSelec] = copiaFilaEnc(filas[filaSelec]);
+									destroiFilaEnc(filas[filaSelec]);
+									criaFilaEnc(filas[filaSelec]);
+									j = 0;
+									while(!vaziaFilaEnc(filasAux[filaSelec])){
+										if(j < cartaSelec){
+											enfileiraFilaEnc(filas[filaSelec], desenfileiraFilaEnc(filasAux[filaSelec]));
+										}else{
+											cartaAux2 = desenfileiraFilaEnc(filasAux[filaSelec]);
+											cartaAux2.loc.x = espaco + i*(espaco + largcarta);
+											cartaAux2.loc.y = 2*espaco + altcarta + pilhas[i]->tamanho*(altcarta/5.) + 
+																filas[i]->tamanho*(altcarta/5.);
+											enfileiraFilaEnc(filas[i], cartaAux2);
+										}
+										++j;
 									}
-									++j;
+									filasCompletas += confereFilaCompleta(filas[i]);
 								}
 							}
 						}
@@ -321,7 +323,6 @@ int main(void){
 					desenfileiraFilaEnc(filasAux[contafila]);
 				}
 				sequenciavalida = confereOrdem(filasAux[contafila]);
-				printf("fila [%d] | carta [%d] | Sequencia = %d\n", contafila, contacarta, sequenciavalida);
 				cartaAux = filasAux[contafila]->ini->info;
 				if(sequenciavalida && IsMouseButtonPressed(0)){
 					cartaSelecionada = cartaAux;

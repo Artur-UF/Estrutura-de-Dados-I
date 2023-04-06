@@ -3,7 +3,7 @@
 #include "raylib.h"
 
 #define SCREENWIDTH 1500
-#define SCREENHEIGHT 700
+#define SCREENHEIGHT 900
 
 
 typedef struct{

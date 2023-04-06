@@ -8,5 +8,6 @@ double uniform(double min, double max);
 void seleciona(bool *selecionado, Info *carta, Rectangle *selecRec);
 int confereOrdem(FilaEnc *fila);
 bool mouseEmFila(FilaEnc **filas, PilhaEnc **pilhas, int *contafila, int *contacarta, float *geometria);
+int confereFilaCompleta(FilaEnc *fila);
 
 #endif

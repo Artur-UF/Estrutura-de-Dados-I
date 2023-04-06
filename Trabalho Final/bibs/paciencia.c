@@ -43,7 +43,7 @@ int confereOrdem(FilaEnc *fila){
     Carta cartaAux2;
     while(filaConfere->tamanho > 0){
         cartaAux2 = desenfileiraFilaEnc(filaConfere);
-        if(cartaAux2.naipe != cartaAux1.naipe || cartaAux2.num != (--cartaAux1.num)){
+        if(cartaAux2.naipe != cartaAux1.naipe || cartaAux2.num != cartaAux1.num-1){
             destroiFilaEnc(filaConfere);
             return 0;
         }
@@ -52,6 +52,29 @@ int confereOrdem(FilaEnc *fila){
     destroiFilaEnc(filaConfere);
     return 1;
 }
+
+int confereFilaCompleta(FilaEnc *fila){
+    FilaEnc *filaConfere = copiaFilaEnc(fila);
+    bool confere = 0;
+    while(filaConfere->tamanho > 0){
+		if(confereOrdem(filaConfere) && filaConfere->tamanho == 13){
+			confere = 1;
+			break;
+		}
+		desenfileiraFilaEnc(filaConfere);
+    }
+	if(confere){
+		int tamanhoNovaFila = fila->tamanho - filaConfere->tamanho;
+		FilaEnc *filaCopia = copiaFilaEnc(fila);
+		while(!vaziaFilaEnc(fila)) desenfileiraFilaEnc(fila);
+		for(int i = 0; i < tamanhoNovaFila; ++i){
+			enfileiraFilaEnc(fila, desenfileiraFilaEnc(filaCopia));
+		}
+		return 1;
+	}
+	return 0;
+} 
+
 
 bool mouseEmFila(FilaEnc **filas, PilhaEnc **pilhas, int *contafila, int *contacarta, float *geometria){
 	// Seleçao de carta
