@@ -1,7 +1,7 @@
 /*
 Para compilar em linux:
 
-gcc main.c bibs/fila_enc.c bibs/pilha_enc.c bibs/paciencia.c bibs/lista_cont.c -I/usr/local/include -L/usr/local/lib /usr/local/lib/libraylib.so.4.2.0
+gcc main.c bibs/*.c -o Paciencia -I/usr/local/include -L/usr/local/lib /usr/local/lib/libraylib.so.4.2.0
 
 */
 #include <stdlib.h>
@@ -81,7 +81,6 @@ int main(void){
 			teste1.width = largcarta;
 			teste1.height = altcarta;
 
-			// Baralho de cima
 			cartas1[i][j].tam = teste1;
 			cartas1[i][j].naipe = 0;
 			cartas1[i][j].num = j;
@@ -89,7 +88,7 @@ int main(void){
 		}
 	}
 	
-	/*
+	
 	// 2 naipes
 	Info cartas2[8][13];
 	Rectangle teste2;
@@ -102,26 +101,35 @@ int main(void){
 			teste2.width = largcarta;
 			teste2.height = altcarta;
 
-			// Baralho de cima
-			cartas2[i][j].tam = teste2;
-			cartas2[i][j].naipe = i;
-			cartas2[i][j].num = j;
-			cartas2[i][j].status = 0;
+			cartas2[0+(4*i)][j].tam = teste2;
+			cartas2[0+(4*i)][j].naipe = i;
+			cartas2[0+(4*i)][j].num = j;
+			cartas2[0+(4*i)][j].status = 0;
+			
+			cartas2[1+(4*i)][j].tam = teste2;
+			cartas2[1+(4*i)][j].naipe = i;
+			cartas2[1+(4*i)][j].num = j;
+			cartas2[1+(4*i)][j].status = 0;
 
-			// Baralho de baixo
-			cartas2[i+4][j].tam = teste2;
-			cartas2[i+4][j].naipe = i;
-			cartas2[i+4][j].num = j;
-			cartas2[i+4][j].status = 0;
+			cartas2[2+(4*i)][j].tam = teste2;
+			cartas2[2+(4*i)][j].naipe = i;
+			cartas2[2+(4*i)][j].num = j;
+			cartas2[2+(4*i)][j].status = 0;
+			
+			cartas2[3+(4*i)][j].tam = teste2;
+			cartas2[3+(4*i)][j].naipe = i;
+			cartas2[3+(4*i)][j].num = j;
+			cartas2[3+(4*i)][j].status = 0;			
+			
 		}
-	}*/	
+	}
 
 	// Cria uma lista para auxiliar na criação de outras coisas
 	ListaCont baralhos;
 	criaListaCont(&baralhos);
 	for(int i = 0; i <= 7; i++){
 		for(int j = 0; j <= 12; j++){
-			inserePosListaCont(&baralhos, cartas1[i][j], 0);
+			inserePosListaCont(&baralhos, cartas2[i][j], 0);
 		}
 	}
 
@@ -307,6 +315,30 @@ int main(void){
 									}
 									filasCompletas += confereFilaCompleta(filas[i]);
 								}
+							}
+						}else{
+							if(GetMouseX() > espaco + i*(largcarta + espaco) &&
+								GetMouseX() < espaco + i*(largcarta + espaco) + largcarta &&
+								GetMouseY() > 2*espaco + altcarta && 
+								GetMouseY() < 2*espaco + 2*altcarta){
+								
+								destroiFilaEnc(filasAux[filaSelec]);
+								filasAux[filaSelec] = copiaFilaEnc(filas[filaSelec]);
+								destroiFilaEnc(filas[filaSelec]);
+								criaFilaEnc(filas[filaSelec]);
+								j = 0;
+								while(!vaziaFilaEnc(filasAux[filaSelec])){
+									if(j < cartaSelec){
+										enfileiraFilaEnc(filas[filaSelec], desenfileiraFilaEnc(filasAux[filaSelec]));
+									}else{
+										cartaAux2 = desenfileiraFilaEnc(filasAux[filaSelec]);
+										cartaAux2.loc.x = espaco + i*(espaco + largcarta);
+										cartaAux2.loc.y = 2*espaco + altcarta +	filas[i]->tamanho*(altcarta/5.);
+										enfileiraFilaEnc(filas[i], cartaAux2);
+									}
+									++j;
+								}
+								filasCompletas += confereFilaCompleta(filas[i]);
 							}
 						}
 					}
