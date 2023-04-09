@@ -16,6 +16,51 @@ double uniform(double min, double max) {
 	return n;
 }
 
+// Desenha o menu e inicializa as pilhas e filas e monte
+int fazMenu(int nNaipes, Rectangle *escolhas){
+	float meiox = SCREENWIDTH/2.;
+	float meioy = SCREENHEIGHT/2.;
+	
+	ClearBackground(RAYWHITE);
+	
+	DrawText("By: Artur e Vitoria", 10, 10, 20, BLACK);
+	DrawText("Paciencia Spider", meiox-150, meioy/6.,	40, BLACK);
+	DrawText("Escolha a dificuldade (n° de naipes):", meiox-250, meioy/3., 30, BLACK);
+	for(int i = 0; i < 3; ++i){
+		DrawRectangleRoundedLines(*escolhas, 0.1, 5, 4, GRAY);
+		if(i == 0){
+			DrawText("1 Naipe - Fácil", escolhas->x + 10, escolhas->y + 5, 30, BLACK);
+			if(GetMouseX() > escolhas->x &&
+				GetMouseX() < escolhas->x + escolhas->width &&
+				GetMouseY() > escolhas->y &&
+				GetMouseY() < escolhas->y + escolhas->height){
+				if(IsMouseButtonPressed(0)) nNaipes = 1;
+			}
+		}
+		else if(i == 1){
+			DrawText("2 Naipes - Médio", escolhas->x + 10, escolhas->y + 5, 30, BLACK);
+			if(GetMouseX() > escolhas->x &&
+				GetMouseX() < escolhas->x + escolhas->width &&
+				GetMouseY() > escolhas->y &&
+				GetMouseY() < escolhas->y + escolhas->height){
+				if(IsMouseButtonPressed(0)) nNaipes = 2;
+			}					
+		}
+		else if(i == 2){
+			DrawText("4 Naipes - DIFICIL", escolhas->x + 10, escolhas->y + 5, 30, BLACK);
+			if(GetMouseX() > escolhas->x &&
+				GetMouseX() < escolhas->x + escolhas->width &&
+				GetMouseY() > escolhas->y &&
+				GetMouseY() < escolhas->y + escolhas->height){
+				if(IsMouseButtonPressed(0)) nNaipes = 4;
+			}				
+		}
+		escolhas->y += 70;
+	}
+	escolhas->y = meioy-250;
+	return nNaipes;	
+}
+
 //Função que confere se uma fila está ordenada
 int confereOrdem(FilaEnc *fila){
     FilaEnc *filaConfere = copiaFilaEnc(fila);
@@ -322,10 +367,10 @@ void realizaJogada(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, bool *s
                         GetMouseX() < espaco + i*(largcarta + espaco) + largcarta &&
                         GetMouseY() > 2*espaco + altcarta &&
                         GetMouseY() < 2*espaco + 2*altcarta){
-                        printf("--- realizaJogada ---\n");
-                        printf("Fila: %d | Naipe: %d | Num: %d | -> Fila[%d]\n", filaSelec, cartaSelecionada.naipe, cartaSelecionada.num, i);
+                        //printf("--- realizaJogada ---\n");
+                        //printf("Fila: %d | Naipe: %d | Num: %d | -> Fila[%d]\n", filaSelec, cartaSelecionada.naipe, cartaSelecionada.num, i);
                         moveCartas(pilhas, filas, geometria, filaSelec, cartaSelec, i);
-                        printf("Deu certo\n*-*-*-*-*-*-*-*-*-*-*-*\n");
+                        //printf("Deu certo\n*-*-*-*-*-*-*-*-*-*-*-*\n");
                         *filasCompletas += confereFilaCompleta(filas[i]);
                     }
                 }
@@ -405,9 +450,9 @@ void selecionaCarta(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, bool *
             *selecionado = 1;
             *cartaSelec = contacarta;
             *filaSelec = contafila;
-            printf("--- selecionaCarta ---\n");
+            /*printf("--- selecionaCarta ---\n");
             printf("Naipe: %d | num: %d | fila: %d\n", cartaSelecionada->naipe, cartaSelecionada->num, *filaSelec);
-            printf("*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*\n");           
+            printf("*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*\n");*/         
             
         }
     }

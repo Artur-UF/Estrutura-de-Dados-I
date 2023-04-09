@@ -45,15 +45,10 @@ int main(void){
 
 	// Cria a matriz de cartas
 	Info cartas[8][13];
-	criaMatriz(cartas, 1, geometria);
 
-	// VERIFICAR UTILIDADE DE STATUS NO TAD
-
-	// Cria e inicializa as filas pilhas e monte
 	PilhaEnc *monte = criaPilhaEnc();
 	PilhaEnc *pilhas[10];
 	FilaEnc *filas[10];
-	inicializaJogo(cartas, monte, pilhas, filas, geometria);
 
 	// Retangulo da carta selecionada
 	Rectangle selecRec;
@@ -69,18 +64,28 @@ int main(void){
 
 	// Menu antes do jogo
 	bool comecaJogo = 0;
+	int nNaipes = 0;
+	float meiox = SCREENWIDTH/2.;
+	float meioy = SCREENHEIGHT/2.;
+	Rectangle escolhas;
+	escolhas.x = meiox-150.;
+	escolhas.y = meioy-250;
+	escolhas.width = 300;
+	escolhas.height = 50;
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
     	// OI VITORIA, TAVA TESTANDO UM MENU AQUI :)
         if(!comecaJogo){
+        
         	BeginDrawing();
-
-        		ClearBackground(RAYWHITE);
-
-        		DrawText("Paciencia", SCREENWIDTH/2., SCREENHEIGHT/7., 	40, BLACK);
-        		if(IsMouseButtonPressed(0)) comecaJogo = 1;
+				nNaipes = fazMenu(nNaipes, &escolhas);
+				if(nNaipes > 0){
+					criaMatriz(cartas, nNaipes, geometria);
+					inicializaJogo(cartas, monte, pilhas, filas, geometria);
+					comecaJogo = 1;
+				}
 
 			EndDrawing();
         }else{

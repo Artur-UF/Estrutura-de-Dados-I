@@ -20,6 +20,9 @@ void criaMatriz(Info cartas[8][13], int nNaipes, float *geometria);
 //Função que inicializa as pilhas e filas
 void inicializaJogo(Info cartas[8][13], PilhaEnc *monte, PilhaEnc **pilhas, FilaEnc **filas, float *geometria);
 
+// Desenha o menu e inicializa as pilhas e filas e monte
+int fazMenu(int nNaipes, Rectangle *escolhas);
+
 //Função que desenha o monte e os espaços para filas completas
 void desenhaCartasSuperiores(Texture2D back, PilhaEnc *monte, float *geometria, int filasCompletas);
 
