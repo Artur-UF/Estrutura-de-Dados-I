@@ -3,6 +3,9 @@ Para compilar em linux:
 
 gcc main.c bibs/*.c -o Paciencia -I/usr/local/include -L/usr/local/lib /usr/local/lib/libraylib.so.4.2.0
 
+
+Na última pilha a sumir ele quebra
+Verifica moveCartas
 */
 #include <stdlib.h>
 #include <math.h>
@@ -52,26 +55,15 @@ int main(void){
 	FilaEnc *filas[10];
 	inicializaJogo(cartas, monte, pilhas, filas, geometria);
 
-	PilhaEnc *pilhasAux[10];
-	FilaEnc *filasAux[10];
-	Info cartaAux, cartaSelecionada, cartaAux2;
-
 	// Retangulo da carta selecionada
 	Rectangle selecRec;
 
-	int i, j, k;
-	int contacarta, contafila, cartaSelec, filaSelec;
-	bool cartavalida = 0;
-	bool sequenciavalida = 0;
+	Info cartaSelecionada;
+	int cartaSelec, filaSelec;
 	bool selecionado = 0;
-	bool retSelec = 0;
-	bool monteVazio = 0;
 
 	// Controle de filas completas
 	int filasCompletas = 0;
-
-	// Retanculos brancos
-	Rectangle rec = {0, 0, largcarta, altcarta};
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
 
@@ -98,33 +90,8 @@ int main(void){
 				desenhaPilhaseFilas(back, deck, monte, pilhas, filas);
 				compraCartasDoMonte(monte, pilhas, filas, geometria);
 				realizaJogada(pilhas, filas, geometria, &selecionado, filaSelec, cartaSelec, cartaSelecionada, &filasCompletas);
-
-				// Seleciona carta
-				cartavalida = mouseEmFila(filas, pilhas, &contafila, &contacarta, geometria);
-
-				if(cartavalida){
-					filasAux[contafila] = copiaFilaEnc(filas[contafila]);
-					for(i = 0; i < contacarta; ++i){
-						desenfileiraFilaEnc(filasAux[contafila]);
-					}
-					sequenciavalida = confereOrdem(filasAux[contafila]);
-					cartaAux = filasAux[contafila]->ini->info;
-					if(sequenciavalida && IsMouseButtonPressed(0)){
-						cartaSelecionada = cartaAux;
-						selecRec.x = espaco + contafila*(espaco + largcarta);
-						selecRec.y = cartaSelecionada.loc.y;
-						selecRec.height = altcarta + (filasAux[contafila]->tamanho - 1)*(altcarta/5.);
-						selecRec.width = largcarta;
-						selecionado = 1;
-						cartaSelec = contacarta;
-						filaSelec = contafila;
-					}
-					cartavalida = 0;
-				}
-
-				if(selecionado){
-					DrawRectangleRoundedLines(selecRec, 0.1, 5, 7, RED);
-				}
+                selecionaCarta(pilhas, filas, geometria, &selecionado, &filaSelec, &cartaSelec, &cartaSelecionada, &selecRec);
+                if(selecionado) DrawRectangleRoundedLines(selecRec, 0.1, 5, 7, RED);
 
 		    EndDrawing();
 		}
@@ -133,7 +100,6 @@ int main(void){
 	// De-Initialization
 	UnloadTexture(deck);
 	UnloadTexture(back);
-
 
     CloseWindow();
     return 0;
