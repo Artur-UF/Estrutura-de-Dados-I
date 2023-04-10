@@ -8,20 +8,14 @@
 //Função que gera um número aleatório em uma distribuição uniforme
 double uniform(double min, double max);
 
-//Função que confere se uma fila está ordenada
-int confereOrdem(FilaEnc *fila);
-
-//Função que confere se um fila está completa
-int confereFilaCompleta(FilaEnc *fila);
+//Função que desenha o menu e define o número de naipes
+int fazMenu(int nNaipes, Rectangle *escolhas);
 
 //Função que cria matriz de cartas
 void criaMatriz(Info cartas[8][13], int nNaipes, float *geometria);
 
 //Função que inicializa as pilhas e filas
 void inicializaJogo(Info cartas[8][13], PilhaEnc *monte, PilhaEnc **pilhas, FilaEnc **filas, float *geometria);
-
-// Desenha o menu e inicializa as pilhas e filas e monte
-int fazMenu(int nNaipes, Rectangle *escolhas);
 
 //Função que desenha o monte e os espaços para filas completas
 void desenhaCartasSuperiores(Texture2D back, PilhaEnc *monte, float *geometria, int filasCompletas);

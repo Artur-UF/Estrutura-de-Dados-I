@@ -6,6 +6,8 @@
 #include "paciencia.h"
 void moveCartas(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, int filaSelec, int cartaSelec, int i);
 bool mouseEmFila(PilhaEnc **pilhas, FilaEnc **filas, int *contafila, int *contacarta, float *geometria);
+int confereOrdem(FilaEnc *fila);
+int confereFilaCompleta(FilaEnc *fila);
 
 //Função que gera um número aleatório em uma distribuição uniforme
 double uniform(double min, double max) {
@@ -16,13 +18,13 @@ double uniform(double min, double max) {
 	return n;
 }
 
-// Desenha o menu e inicializa as pilhas e filas e monte
+//Função que desenha o menu e define o número de naipes
 int fazMenu(int nNaipes, Rectangle *escolhas){
 	float meiox = SCREENWIDTH/2.;
 	float meioy = SCREENHEIGHT/2.;
-	
+
 	ClearBackground(RAYWHITE);
-	
+
 	DrawText("By: Artur e Vitoria", 10, 10, 20, BLACK);
 	DrawText("Paciencia Spider", meiox-150, meioy/6.,	40, BLACK);
 	DrawText("Escolha a dificuldade (n° de naipes):", meiox-250, meioy/3., 30, BLACK);
@@ -44,7 +46,7 @@ int fazMenu(int nNaipes, Rectangle *escolhas){
 				GetMouseY() > escolhas->y &&
 				GetMouseY() < escolhas->y + escolhas->height){
 				if(IsMouseButtonPressed(0)) nNaipes = 2;
-			}					
+			}
 		}
 		else if(i == 2){
 			DrawText("4 Naipes - DIFICIL", escolhas->x + 10, escolhas->y + 5, 30, BLACK);
@@ -53,15 +55,15 @@ int fazMenu(int nNaipes, Rectangle *escolhas){
 				GetMouseY() > escolhas->y &&
 				GetMouseY() < escolhas->y + escolhas->height){
 				if(IsMouseButtonPressed(0)) nNaipes = 4;
-			}				
+			}
 		}
 		escolhas->y += 70;
 	}
-	escolhas->y = meioy-250;
-	return nNaipes;	
+	escolhas->y = meioy - SCREENHEIGHT/4.;
+	return nNaipes;
 }
 
-//Função que confere se uma fila está ordenada
+//Função (auxiliar) que confere se uma fila está ordenada
 int confereOrdem(FilaEnc *fila){
     FilaEnc *filaConfere = copiaFilaEnc(fila);
     Carta cartaAux1 = desenfileiraFilaEnc(filaConfere);
@@ -78,7 +80,7 @@ int confereOrdem(FilaEnc *fila){
     return 1;
 }
 
-//Função que confere se um fila está completa
+//Função (auxiliar) que confere se um fila está completa
 int confereFilaCompleta(FilaEnc *fila){
     FilaEnc *filaConfere = copiaFilaEnc(fila);
     bool confere = 0;
@@ -287,8 +289,8 @@ void desenhaPilhaseFilas(Texture2D back, Texture2D deck, PilhaEnc *monte, PilhaE
         }
     }
 
-    destroiFilaEnc(filaAux);
-    destroiPilhaEnc(pilhaAux);
+    //destroiFilaEnc(filaAux);
+    //destroiPilhaEnc(pilhaAux);
 }
 
 //Função que realiza a compra de cartas
@@ -452,8 +454,8 @@ void selecionaCarta(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, bool *
             *filaSelec = contafila;
             /*printf("--- selecionaCarta ---\n");
             printf("Naipe: %d | num: %d | fila: %d\n", cartaSelecionada->naipe, cartaSelecionada->num, *filaSelec);
-            printf("*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*\n");*/         
-            
+            printf("*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*\n");*/
+
         }
     }
 }

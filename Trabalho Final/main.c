@@ -13,17 +13,10 @@ Verifica moveCartas
 #include <stdio.h>
 
 #include "raylib.h"
-#include "bibs/defs.h"
 #include "bibs/paciencia.h"
 
-
-
-//------------------------------------------------------------------------------------
-// Program main entry point
-//-----------------------------------------------------------------------------------
 int main(void){
-    // Initialization
-    //--------------------------------------------------------------------------------------
+
 	float deckscale = SCREENWIDTH/3000.;
 	float backscale = SCREENWIDTH/9605.;
 
@@ -37,22 +30,20 @@ int main(void){
 	UnloadImage(imdeck);
 	UnloadImage(iback);
 
+	// Geometria da mesa de jogo
 	float largcarta = deck.width/13.;
 	float altcarta = deck.height/4.;
 	float espaco = (SCREENWIDTH - 10*largcarta)/11;
-
 	float geometria[3] = {largcarta, altcarta, espaco};
 
-	// Cria a matriz de cartas
+	// Estruturas para armazenar cartas
 	Info cartas[8][13];
-
 	PilhaEnc *monte = criaPilhaEnc();
 	PilhaEnc *pilhas[10];
 	FilaEnc *filas[10];
 
-	// Retangulo da carta selecionada
+	// Variáveis de seleção
 	Rectangle selecRec;
-
 	Info cartaSelecionada;
 	int cartaSelec, filaSelec;
 	bool selecionado = 0;
@@ -60,25 +51,23 @@ int main(void){
 	// Controle de filas completas
 	int filasCompletas = 0;
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
-
 	// Menu antes do jogo
 	bool comecaJogo = 0;
 	int nNaipes = 0;
 	float meiox = SCREENWIDTH/2.;
 	float meioy = SCREENHEIGHT/2.;
 	Rectangle escolhas;
-	escolhas.x = meiox-150.;
-	escolhas.y = meioy-250;
-	escolhas.width = 300;
-	escolhas.height = 50;
+    escolhas.width = 300;
+	escolhas.height = SCREENHEIGHT/18.;
+	escolhas.x = meiox - 150.;
+	escolhas.y = meioy - SCREENHEIGHT/4.;
 
-    // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    SetTargetFPS(60);
+
+    while (!WindowShouldClose())
     {
-    	// OI VITORIA, TAVA TESTANDO UM MENU AQUI :)
         if(!comecaJogo){
-        
+
         	BeginDrawing();
 				nNaipes = fazMenu(nNaipes, &escolhas);
 				if(nNaipes > 0){
@@ -102,7 +91,6 @@ int main(void){
 		}
     }
 
-	// De-Initialization
 	UnloadTexture(deck);
 	UnloadTexture(back);
 
