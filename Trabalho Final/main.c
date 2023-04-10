@@ -61,7 +61,11 @@ int main(void){
 	escolhas.height = SCREENHEIGHT/18.;
 	escolhas.x = meiox - 150.;
 	escolhas.y = meioy - SCREENHEIGHT/4.;
-
+	
+	// Tela final
+	int nJogadas;
+	char mensagemfinal[20];
+	
     SetTargetFPS(60);
 
     while (!WindowShouldClose())
@@ -83,9 +87,15 @@ int main(void){
 				desenhaCartasSuperiores(back, monte, geometria, filasCompletas);
 				desenhaPilhaseFilas(back, deck, monte, pilhas, filas);
 				compraCartasDoMonte(monte, pilhas, filas, geometria);
-				realizaJogada(pilhas, filas, geometria, &selecionado, filaSelec, cartaSelec, cartaSelecionada, &filasCompletas);
+				realizaJogada(pilhas, filas, geometria, &selecionado, filaSelec, cartaSelec, cartaSelecionada, &filasCompletas, &nJogadas);
                 selecionaCarta(pilhas, filas, geometria, &selecionado, &filaSelec, &cartaSelec, &cartaSelecionada, &selecRec);
                 if(selecionado) DrawRectangleRoundedLines(selecRec, 0.1, 5, 7, RED);
+                
+                if(filasCompletas == 8){
+					DrawText("PARABENS VOCE VENCEU", meiox-150, (meioy/6.)+(2*espaco+altcarta),	40, BLACK); // bota mais pra baixo
+					sprintf(mensagemfinal, "N° de jogadas: %d", nJogadas); // talvez mais pra direita
+					DrawText(mensagemfinal, meiox-250, (meioy/3.)+(2*espaco+altcarta), 30, BLACK);                	
+                }
 
 		    EndDrawing();
 		}

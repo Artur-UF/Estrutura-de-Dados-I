@@ -345,7 +345,7 @@ void moveCartas(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, int filaSe
 }
 
 //Função que move cartas de uma fila a outra se permitido
-void realizaJogada(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, bool *selecionado, int filaSelec, int cartaSelec, Info cartaSelecionada, int *filasCompletas){
+void realizaJogada(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, bool *selecionado, int filaSelec, int cartaSelec, Info cartaSelecionada, int *filasCompletas, int *nJogadas){
     float largcarta = geometria[0];
 	float altcarta = geometria[1];
 	float espaco = geometria[2];
@@ -362,6 +362,7 @@ void realizaJogada(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, bool *s
                         if(filas[i]->fim->info.num == 1 + cartaSelecionada.num){
                             moveCartas(pilhas, filas, geometria, filaSelec, cartaSelec, i);
                             *filasCompletas += confereFilaCompleta(filas[i]);
+                            *nJogadas += 1;
                         }
                     }
                 }else{ //Pilha vazia
@@ -369,11 +370,9 @@ void realizaJogada(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, bool *s
                         GetMouseX() < espaco + i*(largcarta + espaco) + largcarta &&
                         GetMouseY() > 2*espaco + altcarta &&
                         GetMouseY() < 2*espaco + 2*altcarta){
-                        //printf("--- realizaJogada ---\n");
-                        //printf("Fila: %d | Naipe: %d | Num: %d | -> Fila[%d]\n", filaSelec, cartaSelecionada.naipe, cartaSelecionada.num, i);
                         moveCartas(pilhas, filas, geometria, filaSelec, cartaSelec, i);
-                        //printf("Deu certo\n*-*-*-*-*-*-*-*-*-*-*-*\n");
                         *filasCompletas += confereFilaCompleta(filas[i]);
+                    	*nJogadas += 1;
                     }
                 }
             }
