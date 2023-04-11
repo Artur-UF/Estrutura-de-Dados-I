@@ -103,7 +103,7 @@ int confereFilaCompleta(FilaEnc *fila){
 	return 0;
 }
 
-//Função que cria matriz de cartas
+//Função que cria matriz de cartas (auxilia a função inicializaJogo)
 void criaMatriz(Info cartas[8][13], int nNaipes, float *geometria){
 	float largcarta = geometria[0];
 	float altcarta = geometria[1];
@@ -288,9 +288,6 @@ void desenhaPilhaseFilas(Texture2D back, Texture2D deck, PilhaEnc *monte, PilhaE
             }
         }
     }
-
-    //destroiFilaEnc(filaAux);
-    //destroiPilhaEnc(pilhaAux);
 }
 
 //Função que realiza a compra de cartas
@@ -365,7 +362,7 @@ void realizaJogada(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, bool *s
                             *nJogadas += 1;
                         }
                     }
-                }else{ //Pilha vazia
+                }else{ // Move para espaço vazio
                     if(GetMouseX() > espaco + i*(largcarta + espaco) &&
                         GetMouseX() < espaco + i*(largcarta + espaco) + largcarta &&
                         GetMouseY() > 2*espaco + altcarta &&
@@ -427,7 +424,7 @@ bool mouseEmFila(PilhaEnc **pilhas, FilaEnc **filas, int *contafila, int *contac
 	return 0;
 }
 
-//Função que seleciona uma carta
+//Função que seleciona uma carta ou fila de cartas
 void selecionaCarta(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, bool *selecionado, int *filaSelec, int *cartaSelec, Info *cartaSelecionada, Rectangle *selecRec){
     float largcarta = geometria[0];
 	float altcarta = geometria[1];
@@ -451,12 +448,9 @@ void selecionaCarta(PilhaEnc **pilhas, FilaEnc **filas, float *geometria, bool *
             *selecionado = 1;
             *cartaSelec = contacarta;
             *filaSelec = contafila;
-            /*printf("--- selecionaCarta ---\n");
-            printf("Naipe: %d | num: %d | fila: %d\n", cartaSelecionada->naipe, cartaSelecionada->num, *filaSelec);
-            printf("*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*\n");*/
-
         }
     }
+    if(*selecionado) DrawRectangleRoundedLines(*selecRec, 0.1, 5, 7, RED);
 }
 
 

@@ -1,12 +1,11 @@
 /*
+Nomes: Artur Uhlik Fröhlich e Vitória Tesser Henkes
+Programa: Paciência Spider
+
 Para compilar em linux:
-
 gcc main.c bibs/*.c -o Paciencia -I/usr/local/include -L/usr/local/lib /usr/local/lib/libraylib.so.4.2.0
-
-
-Na última pilha a sumir ele quebra
-Verifica moveCartas
 */
+
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
@@ -19,7 +18,8 @@ int main(void){
 
 	float deckscale = SCREENWIDTH/3000.;
 	float backscale = SCREENWIDTH/9605.;
-
+	
+	// Inicialização da janela e das texturas das cartas
     InitWindow(SCREENWIDTH, SCREENHEIGHT, "Paciencia");
 	Image imdeck = LoadImage("imagens/deck.png");
 	ImageResize(&imdeck, imdeck.width*deckscale, imdeck.height*deckscale);
@@ -61,11 +61,11 @@ int main(void){
 	escolhas.height = SCREENHEIGHT/18.;
 	escolhas.x = meiox - 150.;
 	escolhas.y = meioy - SCREENHEIGHT/4.;
-	
+
 	// Tela final
 	int nJogadas;
 	char mensagemfinal[20];
-	
+
     SetTargetFPS(60);
 
     while (!WindowShouldClose())
@@ -89,12 +89,11 @@ int main(void){
 				compraCartasDoMonte(monte, pilhas, filas, geometria);
 				realizaJogada(pilhas, filas, geometria, &selecionado, filaSelec, cartaSelec, cartaSelecionada, &filasCompletas, &nJogadas);
                 selecionaCarta(pilhas, filas, geometria, &selecionado, &filaSelec, &cartaSelec, &cartaSelecionada, &selecRec);
-                if(selecionado) DrawRectangleRoundedLines(selecRec, 0.1, 5, 7, RED);
-                
+
                 if(filasCompletas == 8){
-					DrawText("PARABENS VOCE VENCEU", meiox-150, (meioy/6.)+(2*espaco+altcarta),	40, BLACK); // bota mais pra baixo
-					sprintf(mensagemfinal, "N° de jogadas: %d", nJogadas); // talvez mais pra direita
-					DrawText(mensagemfinal, meiox-250, (meioy/3.)+(2*espaco+altcarta), 30, BLACK);                	
+					DrawText("PARABENS, VOCE VENCEU!", meiox-150, (meioy/6.)+(2*espaco+altcarta),	40, WHITE);
+					sprintf(mensagemfinal, "N° de jogadas: %d", nJogadas);
+					DrawText(mensagemfinal, meiox-250, (meioy/3.)+(2*espaco+altcarta), 30, WHITE);
                 }
 
 		    EndDrawing();
