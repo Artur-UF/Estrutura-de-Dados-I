@@ -59,40 +59,6 @@ int vaziaFilaEnc(FilaEnc *fila){
 
 
 // Função que retorna uma cópia de uma fila invertida
-FilaEnc* copiaInvertidaFilaEnc(FilaEnc *fila){
-	FilaEnc *filaCopia;
-	filaCopia = criaFilaEnc();
-
-	PilhaEnc *pilhaAux;
-	pilhaAux = criaPilhaEnc();
-
-	FilaEnc *filaAux;
-	filaAux = criaFilaEnc();
-	
-	Info infoaux;	
-
-	while(!vaziaFilaEnc(fila)){
-		infoaux = desenfileiraFilaEnc(fila);
-		empilhaPilhaEnc(pilhaAux, infoaux);
-		enfileiraFilaEnc(filaAux, infoaux);
-	}
-	
-	while(!vaziaFilaEnc(filaAux)){
-		enfileiraFilaEnc(fila, desenfileiraFilaEnc(filaAux));	
-	}
-
-	while(!vaziaPilhaEnc(pilhaAux)){
-		enfileiraFilaEnc(filaCopia, desempilhaPilhaEnc(pilhaAux));
-	}
-
-	destroiFilaEnc(filaAux);
-	destroiPilhaEnc(pilhaAux);
-
-	return filaCopia;
-}
-
-
-// Função que retorna uma cópia de uma fila invertida
 FilaEnc* copiaFilaEnc(FilaEnc *fila){
 	FilaEnc *filaCopia;
 	filaCopia = criaFilaEnc();
@@ -115,23 +81,6 @@ FilaEnc* copiaFilaEnc(FilaEnc *fila){
 	destroiFilaEnc(filaAux);
 	return filaCopia;
 }
-/*
-int confereOrdem(FilaEnc *fila){
-    FilaEnc *filaConfere = copiaFilaEnc(fila);
-    Carta cartaAux1 = desenfileiraFilaEnc(filaConfere);
-    Carta cartaAux2;
-    while(filaConfere->tamanho > 0){
-        cartaAux2 = desenfileiraFilaEnc(filaConfere);
-        if(cartaAux2.naipe != cartaAux1.naipe || cartaAux2.num != (--cartaAux1.num)){
-            destroiFilaEnc(filaConfere);
-            return 0;
-        }
-        cartaAux1 = cartaAux2;
-    }
-    destroiFilaEnc(filaConfere);
-    return 1;
-}
-*/
 
 
 

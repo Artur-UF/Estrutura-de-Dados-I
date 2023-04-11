@@ -1,6 +1,7 @@
 /*
-Nomes: Artur Uhlik Fröhlich e Vitória Tesser Henkes
+Autores: Artur Uhlik Fröhlich e Vitória Tesser Henkes
 Programa: Paciência Spider
+Trabalho Final da disciplina Estruturas de Dados I
 
 Para compilar em linux:
 gcc main.c bibs/*.c -o Paciencia -I/usr/local/include -L/usr/local/lib /usr/local/lib/libraylib.so.4.2.0

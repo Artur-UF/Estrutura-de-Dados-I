@@ -1,6 +1,6 @@
 #ifndef _PACIENCIA_H_
 #define _PACIENCIA_H_
-#include "defs.h"
+#include "definicoes.h"
 #include "fila_enc.h"
 #include "pilha_enc.h"
 #include "lista_cont.h"

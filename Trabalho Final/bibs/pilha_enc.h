@@ -1,6 +1,6 @@
 #ifndef _PILHA_ENC_H_
 #define _PILHA_ENC_H_
-#include "defs.h"
+#include "definicoes.h"
 #include "fila_enc.h"
 
 typedef NodoLEnc NodoPEnc;
@@ -27,8 +27,8 @@ int vaziaPilhaEnc(PilhaEnc* pilha);
 
 // Função que inverte a pilha
 void invertePilhaEnc(PilhaEnc *pilha);
-void invertePilhaEncBonus(PilhaEnc *pilha);
 
+// Função que copia uma Pilha
 PilhaEnc* copiaPilhaEnc(PilhaEnc *pilha);
 
 #endif

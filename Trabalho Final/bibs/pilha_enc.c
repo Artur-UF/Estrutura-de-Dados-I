@@ -76,25 +76,6 @@ void invertePilhaEnc(PilhaEnc *pilha){
 	destroiPilhaEnc(pilhaAux2);
 }
 
-
-
-
-void invertePilhaEncBonus(PilhaEnc *pilha){
-	FilaEnc *filaAux;
-	filaAux = criaFilaEnc();
-
-	while(!vaziaPilhaEnc(pilha)){
-		enfileiraFilaEnc(filaAux, desempilhaPilhaEnc(pilha));
-	}
-
-	while(!vaziaFilaEnc(filaAux)){
-		empilhaPilhaEnc(pilha, desenfileiraFilaEnc(filaAux));
-	}
-
-	destroiFilaEnc(filaAux);
-}
-
-
 // Função que retorna uma cópia de uma fila invertida
 PilhaEnc* copiaPilhaEnc(PilhaEnc *pilha){
 	PilhaEnc *pilhaCopia;
